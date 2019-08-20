@@ -25,6 +25,8 @@ netParams = specs.NetParams()   # object of class NetParams to store the network
 
 import random as rnd
 import numpy as np
+
+import json
 from settings import nav_type, drug, dose
 
 def smallWorldConn(NPre, NPost, p, K, selfConn=True):
@@ -254,6 +256,12 @@ netParams.yspacing = 100 # um
 netParams.axondelay = 2
 
 netParams.defaultThreshold = 0
+
+###############################################################################
+# LOAD NETCONS
+###############################################################################
+with open('netcons.json', 'r') as fp:
+    netcons = json.load(fp)
 
 ###############################################################################
 # Population parameters
@@ -499,7 +507,7 @@ netParams.stimTargetParams['Input_1->PY'] = {'source': 'Input_1', 'sec':'soma', 
 # Connectivity parameters
 ###############################################################################
 
-####################### intra cortikal projections ############################
+####################### intra cortical projections ############################
 
 netParams.connParams['PY->PY_AMPA'] = {
     'preConds': {'popLabel': 'PY'}, 
@@ -512,7 +520,9 @@ netParams.connParams['PY->PY_AMPA'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': PY_PY_AMPA_Prob}
-    'connList': smallWorldConn(N_PY,N_PY,pCrx,PY_PY_AMPA_Prob,selfConn)}   
+    'connList': netcons['AMPA_S']['sPY->sPY']}
+    #'connList': smallWorldConn(N_PY,N_PY,pCrx,PY_PY_AMPA_Prob,selfConn)}
+       
 
 netParams.connParams['PY->IN_AMPA'] = {
     'preConds': {'popLabel': 'PY'}, 
@@ -525,7 +535,8 @@ netParams.connParams['PY->IN_AMPA'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': PY_IN_AMPA_Prob}
-    'connList': smallWorldConn(N_PY,N_IN,pCrx,PY_IN_AMPA_Prob)}   
+    'connList': netcons['AMPA_S']['sPY->sIN']}
+    #'connList': smallWorldConn(N_PY,N_IN,pCrx,PY_IN_AMPA_Prob)}   
 
 
 netParams.connParams['IN->IN_GABAA'] = {
@@ -539,7 +550,8 @@ netParams.connParams['IN->IN_GABAA'] = {
     'synMech': 'GABAA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': IN_PY_GABAA_Prob}
-    'connList': RegularConn2005(N_IN,N_PY)}   
+    'connList': netcons['GABAa_S']['sIN->sIN']}
+    #'connList': RegularConn2005(N_IN,N_PY)}   
 
 
 netParams.connParams['IN->PY_GABAA'] = {
@@ -553,7 +565,8 @@ netParams.connParams['IN->PY_GABAA'] = {
     'synMech': 'GABAA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': IN_PY_GABAA_Prob}
-    'connList': smallWorldConn(N_IN,N_PY,pCrx,IN_PY_GABAA_Prob)}   
+    'connList': netcons['GABAa_S']['sIN->sPY']}
+    #'connList': smallWorldConn(N_IN,N_PY,pCrx,IN_PY_GABAA_Prob)}   
 
 netParams.connParams['IN->PY_GABAB'] = {
     'preConds': {'popLabel': 'IN'}, 
@@ -566,7 +579,8 @@ netParams.connParams['IN->PY_GABAB'] = {
     'synMech': 'GABAB_S1',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': IN_PY_GABAB_Prob}
-    'connList': smallWorldConn(N_IN,N_PY,pCrx,IN_PY_GABAB_Prob)}
+    'connList': netcons['GABAb_S']['sIN->sPY']}
+    #'connList': smallWorldConn(N_IN,N_PY,pCrx,IN_PY_GABAB_Prob)}
 
 
 ###################### intra thalamic projections #############################
@@ -584,7 +598,8 @@ netParams.connParams['TC->RE'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': TC_RE_AMPA_Prob}
-    'connList': smallWorldConn(N_TC,N_RE,pThl,TC_RE_AMPA_Prob)}
+    'connList': netcons['AMPA_S']['sTC->sRE']}
+    #'connList': smallWorldConn(N_TC,N_RE,pThl,TC_RE_AMPA_Prob)}
 
 netParams.connParams['RE->TC_GABAA'] = {
     'preConds': {'popLabel': 'RE'}, 
@@ -597,7 +612,8 @@ netParams.connParams['RE->TC_GABAA'] = {
     'synMech': 'GABAA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': RE_TC_GABAA_Prob}
-    'connList': smallWorldConn(N_RE,N_TC,pThl,RE_TC_GABAA_Prob)}   
+    'connList': netcons['GABAa_S']['sRE->sTC']}
+    #'connList': smallWorldConn(N_RE,N_TC,pThl,RE_TC_GABAA_Prob)}   
 
 netParams.connParams['RE->TC_GABAB'] = {
     'preConds': {'popLabel': 'RE'}, 
@@ -610,7 +626,10 @@ netParams.connParams['RE->TC_GABAB'] = {
     'synMech': 'GABAB_S2',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': RE_TC_GABAB_Prob}
-    'connList': smallWorldConn(N_RE,N_TC,pThl,RE_TC_GABAB_Prob)}
+    'connList': netcons['GABAb_S']['sRE->sTC']}
+    #'connList': smallWorldConn(N_RE,N_TC,pThl,RE_TC_GABAB_Prob)}
+
+
 #netParams.connParams['RE->TC_GABAB']['gmax']=0.04/(N_TC*RE_TC_GABAB_Prob+1)
 
 netParams.connParams['RE->RE'] = {
@@ -626,7 +645,8 @@ netParams.connParams['RE->RE'] = {
     #'synsPerConn': 1,
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': RE_RE_GABAA_Prob}
-    'connList': smallWorldConn(N_RE,N_RE,pThl,RE_RE_GABAA_Prob,selfConn)}   
+    'connList': netcons['GABAa_S']['sRE->sRE']}
+    #'connList': smallWorldConn(N_RE,N_RE,pThl,RE_RE_GABAA_Prob,selfConn)}   
 
 ################# thalamo-cortical projections ################################
 
@@ -641,7 +661,8 @@ netParams.connParams['PY->TC'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': PY_TC_AMPA_Prob}
-    'connList': smallWorldConn(N_PY,N_TC,pThlCrx,PY_TC_AMPA_Prob)}   
+    'connList': netcons['AMPA_S']['sPY->sTC']}
+    #'connList': smallWorldConn(N_PY,N_TC,pThlCrx,PY_TC_AMPA_Prob)}   
 
 netParams.connParams['PY->RE'] = {
     'preConds': {'popLabel': 'PY'}, 
@@ -653,7 +674,8 @@ netParams.connParams['PY->RE'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': PY_RE_AMPA_Prob}
-    'connList': smallWorldConn(N_PY,N_RE,pThlCrx,PY_RE_AMPA_Prob)}   
+    'connList': netcons['AMPA_S']['sPY->sRE']}
+    #'connList': smallWorldConn(N_PY,N_RE,pThlCrx,PY_RE_AMPA_Prob)}   
 
 netParams.connParams['TC->PY'] = {
     'preConds': {'popLabel': 'TC'}, 
@@ -665,10 +687,12 @@ netParams.connParams['TC->PY'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': TC_PY_AMPA_Prob}
-    'connList': smallWorldConn(N_TC,N_PY,pThlCrx,TC_PY_AMPA_Prob)}   
+    'connList': netcons['AMPA_S']['sTC->sPY']}
+    #'connList': smallWorldConn(N_TC,N_PY,pThlCrx,TC_PY_AMPA_Prob)}   
 
 
 # REMOVED THESE, not physiological and didn't change oscillations?
+"""
 netParams.connParams['TC->IN'] = {
     'preConds': {'popLabel': 'TC'}, 
     'postConds': {'popLabel': 'IN'},
@@ -680,3 +704,4 @@ netParams.connParams['TC->IN'] = {
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': TC_IN_AMPA_Prob}
     'connList': smallWorldConn(N_TC,N_IN,pThlCrx,TC_IN_AMPA_Prob)}
+"""
