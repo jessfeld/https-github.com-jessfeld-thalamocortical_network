@@ -12,11 +12,9 @@ sim.createSimulateAnalyze(netParams = netParams.netParams, simConfig = cfg.simCo
 """
 (pops, cells, conns, rxd, stims, simData) = sim.create(netParams.netParams, cfg.simConfig, output=True)
 
-#create, puts the network together but doesn't run
 ncl = h.List("NetCon")
 
 asy = [x for x in ncl if 'GABAb' in str(x.syn())]
-print([x.syn() for x in asy])
 precellRE = [x for x in asy if x.precell().tags['cellType'] == 'RE']
 postcellTC = [x for x in asy if x.postcell().tags['cellType'] == 'TC']
 precellIN = [x for x in asy if x.precell().tags['cellType'] == 'IN']
