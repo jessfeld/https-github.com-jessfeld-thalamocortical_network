@@ -15,16 +15,17 @@ sim.createSimulateAnalyze(netParams = netParams.netParams, simConfig = cfg.simCo
 ncl = h.List("NetCon")
 
 asy = [x for x in ncl if 'GABAb' in str(x.syn())]
+print(asy[0].syn().get_segment().sec.name())
 precellRE = [x for x in asy if x.precell().tags['cellType'] == 'RE']
 postcellTC = [x for x in asy if x.postcell().tags['cellType'] == 'TC']
 precellIN = [x for x in asy if x.precell().tags['cellType'] == 'IN']
 postcellPY = [x for x in asy if x.postcell().tags['cellType'] == 'PY']
-print( 'RE->:%d'%(len(precellRE)) )
-print( '->TC:%d'%(len(postcellTC)))
-print( 'IN->:%d'%(len(precellIN)) )
-print( '->PY:%d'%(len(postcellPY)))
-"""
+#print( 'RE->:%d'%(len(precellRE)) )
+#print( '->TC:%d'%(len(postcellTC)))
+#print( 'IN->:%d'%(len(precellIN)) )
+#print( '->PY:%d'%(len(postcellPY)))
 
+"""
 
 """
 if (randInit):
