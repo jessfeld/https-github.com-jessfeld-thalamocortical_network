@@ -19,7 +19,7 @@ simConfig.Dt = 0.1
 simConfig.steps_per_ms = 1/simConfig.Dt
 simConfig.npoints = 20000
 
-simConfig.duration = 2000 # simConfig.trans + simConfig.npoints * simConfig.Dt # Duration of the simulation, in ms
+simConfig.duration = simConfig.npoints * simConfig.Dt # simConfig.trans + simConfig.npoints * simConfig.Dt # Duration of the simulation, in ms
 simConfig.dt = simConfig.Dt # Internal integration timestep to use
 simConfig.hParams['celsius'] = celsius
 simConfig.hParams['v_init'] = v_init

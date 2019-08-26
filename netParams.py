@@ -221,7 +221,7 @@ selfConn = False
 
 ININweight = 0.00
 
-gabaapercent = 0.1
+gabaapercent = 1
 gababpercent = 1
 
 
@@ -241,6 +241,12 @@ PYRE    = 1*1
 TCPY    = 1*1
 TCIN    = 1*1
 
+#INPYb*0.03/(N_PY*IN_PY_GABAB_Prob+1)} #0.5}#0.002727}# }  # GABAB
+#RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1)} #0.5}#0.003636}# }  # GABAB
+#print("INPY-GABAB_weight = ", netParams.synMechParams['GABAB_S1']['gmax'])
+PYgmax = 0.002727 * 0
+#print("RETC-GABAB_weight = ", netParams.synMechParams['GABAB_S2']['gmax'])
+TCgmax = 0.003636 * 0
 ###############################################################################
 # NETWORK PARAMETERS
 ###############################################################################
@@ -485,8 +491,8 @@ netParams.synMechParams['GABAA_S'] = {'mod': 'GABAa_S', 'Cmax': 0.5, 'Cdur': 0.3
 
 # GABAb_S
 #netParams.synMechParams['GABAB'] = {'mod': 'Exp2Syn', 'tau1': 0.07, 'tau2': 9.1, 'e': -80}  # GABAB
-netParams.synMechParams['GABAB_S1'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': INPYb*0.03/(N_PY*IN_PY_GABAB_Prob+1)} #0.5}#0.002727}# }  # GABAB
-netParams.synMechParams['GABAB_S2'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1)} #0.5}#0.003636}# }  # GABAB
+netParams.synMechParams['GABAB_S1'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': PYgmax }#INPYb*0.03/(N_PY*IN_PY_GABAB_Prob+1)} #0.5}#0.002727}# }  # GABAB
+netParams.synMechParams['GABAB_S2'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': TCgmax }#RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1)} #0.5}#0.003636}# }  # GABAB
 
 #netParams.synMechParams['GABAB_S'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.52, 'K2': 0.0045, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'Erev': -95} # }  # GABAB
 
@@ -571,7 +577,7 @@ netParams.connParams['IN->PY_GABAA'] = {
 netParams.connParams['IN->PY_GABAB'] = {
     'preConds': {'popLabel': 'IN'}, 
     'postConds': {'popLabel': 'PY'},
-    #'weight': INPYb*gababpercent*0.03/(N_PY*IN_PY_GABAB_Prob+1),         # (Destexhe, 1998)
+    'weight': INPYb*gababpercent*0.03/(N_PY*IN_PY_GABAB_Prob+1),         # (Destexhe, 1998)
     #'weight': 0.03,         # (Destexhe, 1998)
     'weight': 1,
     'sec': 'soma',
@@ -619,7 +625,7 @@ netParams.connParams['RE->TC_GABAA'] = {
 netParams.connParams['RE->TC_GABAB'] = {
     'preConds': {'popLabel': 'RE'}, 
     'postConds': {'popLabel': 'TC'},
-    #'weight': RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1),         # (Destexhe, 1998)
+    'weight': RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1),         # (Destexhe, 1998)
     #'weight': 0.04,         # (Destexhe, 1998)
     'weight': 1,
     'sec': 'soma',
