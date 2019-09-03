@@ -221,7 +221,7 @@ selfConn = False
 
 ININweight = 0.00
 
-gabaapercent = 1
+gabaapercent = 0.1
 gababpercent = 1
 
 
@@ -244,9 +244,9 @@ TCIN    = 1*1
 #INPYb*0.03/(N_PY*IN_PY_GABAB_Prob+1)} #0.5}#0.002727}# }  # GABAB
 #RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1)} #0.5}#0.003636}# }  # GABAB
 #print("INPY-GABAB_weight = ", netParams.synMechParams['GABAB_S1']['gmax'])
-PYgmax = 0.002727 * 0
+PYgmax = 0.03/11 * 1
 #print("RETC-GABAB_weight = ", netParams.synMechParams['GABAB_S2']['gmax'])
-TCgmax = 0.003636 * 0
+TCgmax = 0.04/11 * 1
 ###############################################################################
 # NETWORK PARAMETERS
 ###############################################################################
@@ -573,11 +573,11 @@ netParams.connParams['IN->PY_GABAA'] = {
     #'probability': IN_PY_GABAA_Prob}
     'connList': netcons['GABAa_S']['sIN->sPY']}
     #'connList': smallWorldConn(N_IN,N_PY,pCrx,IN_PY_GABAA_Prob)}   
-
+"""
 netParams.connParams['IN->PY_GABAB'] = {
     'preConds': {'popLabel': 'IN'}, 
     'postConds': {'popLabel': 'PY'},
-    'weight': INPYb*gababpercent*0.03/(N_PY*IN_PY_GABAB_Prob+1),         # (Destexhe, 1998)
+    #'weight': INPYb*gababpercent*0.03/(N_PY*IN_PY_GABAB_Prob+1),         # (Destexhe, 1998)
     #'weight': 0.03,         # (Destexhe, 1998)
     'weight': 1,
     'sec': 'soma',
@@ -588,7 +588,7 @@ netParams.connParams['IN->PY_GABAB'] = {
     #'probability': IN_PY_GABAB_Prob}
     'connList': netcons['GABAb_S']['sIN->sPY']}
     #'connList': smallWorldConn(N_IN,N_PY,pCrx,IN_PY_GABAB_Prob)}
-
+"""
 
 ###################### intra thalamic projections #############################
 
@@ -621,11 +621,11 @@ netParams.connParams['RE->TC_GABAA'] = {
     #'probability': RE_TC_GABAA_Prob}
     'connList': netcons['GABAa_S']['sRE->sTC']}
     #'connList': smallWorldConn(N_RE,N_TC,pThl,RE_TC_GABAA_Prob)}   
-
+"""
 netParams.connParams['RE->TC_GABAB'] = {
     'preConds': {'popLabel': 'RE'}, 
     'postConds': {'popLabel': 'TC'},
-    'weight': RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1),         # (Destexhe, 1998)
+    #'weight': RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1),         # (Destexhe, 1998)
     #'weight': 0.04,         # (Destexhe, 1998)
     'weight': 1,
     'sec': 'soma',
@@ -636,7 +636,7 @@ netParams.connParams['RE->TC_GABAB'] = {
     #'probability': RE_TC_GABAB_Prob}
     'connList': netcons['GABAb_S']['sRE->sTC']}
     #'connList': smallWorldConn(N_RE,N_TC,pThl,RE_TC_GABAB_Prob)}
-
+"""
 
 #netParams.connParams['RE->TC_GABAB']['gmax']=0.04/(N_TC*RE_TC_GABAB_Prob+1)
 
@@ -700,16 +700,16 @@ netParams.connParams['TC->PY'] = {
 
 
 # REMOVED THESE, not physiological and didn't change oscillations?
-"""
-netParams.connParams['TC->IN'] = {
-    'preConds': {'popLabel': 'TC'}, 
-    'postConds': {'popLabel': 'IN'},
-    'weight': TCIN*0/(N_IN*TC_IN_AMPA_Prob+1),        # (Destexhe, 1998)  
-    #'weight': 0.4,        # (Destexhe, 1998)  
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    'synMech': 'AMPA_S',
-    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-    #'probability': TC_IN_AMPA_Prob}
-    'connList': smallWorldConn(N_TC,N_IN,pThlCrx,TC_IN_AMPA_Prob)}
-"""
+#
+#netParams.connParams['TC->IN'] = {
+#    'preConds': {'popLabel': 'TC'}, 
+#    'postConds': {'popLabel': 'IN'},
+#    'weight': TCIN*0/(N_IN*TC_IN_AMPA_Prob+1),        # (Destexhe, 1998)  
+#    #'weight': 0.4,        # (Destexhe, 1998)  
+#    'delay': netParams.axondelay, 
+#    'loc': 0.5,
+#    'synMech': 'AMPA_S',
+#    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
+#    #'probability': TC_IN_AMPA_Prob}
+#    'connList': smallWorldConn(N_TC,N_IN,pThlCrx,TC_IN_AMPA_Prob)}
+#

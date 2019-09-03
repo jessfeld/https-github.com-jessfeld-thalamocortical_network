@@ -17,7 +17,7 @@ simConfig.checkErrors=False # True #
 simConfig.trans = 0000
 simConfig.Dt = 0.1
 simConfig.steps_per_ms = 1/simConfig.Dt
-simConfig.npoints = 20000
+simConfig.npoints = 9000
 
 simConfig.duration = simConfig.npoints * simConfig.Dt # simConfig.trans + simConfig.npoints * simConfig.Dt # Duration of the simulation, in ms
 simConfig.dt = simConfig.Dt # Internal integration timestep to use
@@ -29,15 +29,15 @@ simConfig.verbose = False # True  # show detailed messages
 # Recording 
 simConfig.recordCells = []  # which cells to record from
 
-simConfig.recordTraces = {'V_soma':{'sec':'soma','loc':0.5,'var':'v'},
+simConfig.recordTraces = {'V_soma':{'sec':'soma','loc':0.5,'var':'v'}
                           #'i_AMPA': {'sec':'soma', 'loc':0.5, 'synMech': 'AMPA_S', 'var': 'i', 'conds': {'pop': ['RE', 'TC', 'IN', 'PY']}},
                           #'g_AMPA': {'sec':'soma', 'loc':0.5, 'synMech': 'AMPA_S', 'var': 'g', 'conds': {'pop': ['RE', 'TC', 'IN', 'PY']}},
                           #'i_GABAA': {'sec':'soma', 'loc':0.5, 'synMech': 'GABAA_S', 'var': 'i', 'conds': {'pop': ['TC', 'PY', 'RE']}},
                           #'g_GABAA': {'sec':'soma', 'loc':0.5, 'synMech': 'GABAA_S', 'var': 'g', 'conds': {'pop': ['TC', 'PY', 'RE']}},
-                          'i_GABAB1': {'sec':'soma', 'loc':0.5, 'synMech': 'GABAB_S1', 'var': 'i'},
-                          'g_GABAB1': {'sec':'soma', 'loc':0.5, 'synMech': 'GABAB_S1', 'var': 'g'},
-                          'i_GABAB2': {'sec':'soma', 'loc':0.5, 'synMech': 'GABAB_S2', 'var': 'i'},
-                          'g_GABAB2': {'sec':'soma', 'loc':0.5, 'synMech': 'GABAB_S2', 'var': 'g'}
+                          #'i_GABAB1': {'sec':'soma', 'loc':0.5, 'synMech': 'GABAB_S1', 'var': 'i'},
+                          #'g_GABAB1': {'sec':'soma', 'loc':0.5, 'synMech': 'GABAB_S1', 'var': 'g'},
+                          #'i_GABAB2': {'sec':'soma', 'loc':0.5, 'synMech': 'GABAB_S2', 'var': 'i'},
+                          #'g_GABAB2': {'sec':'soma', 'loc':0.5, 'synMech': 'GABAB_S2', 'var': 'g'}
                           }
 
 #simConfig.recordTraces = {'V_soma':{'sec':'soma','loc':0.5,'var':'v'}}
