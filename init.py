@@ -22,7 +22,7 @@ INsomas = [ x.secs['soma']['hObj'] for x in INcells ]
 TCsomas = [ x.secs['soma']['hObj'] for x in TCcells ]
 REsomas = [ x.secs['soma']['hObj'] for x in REcells ]
 
-RETCgababsyns = []
+RETCgababsyns = [ [ ] ] * 100
 RETCnetcons = []
 for i in range(100):
   for j in range(i-5, i+5+1):
@@ -36,13 +36,11 @@ for i in range(100):
     gababsyn = h.GABAb_S()                                                        #gababsyn = new GABAb_S()
     gababsyn.loc(0.5, sec = TCsomas[jbound])                                      #TC[jbound].soma gababsyn.loc(0.5)
     gababsyn.gmax = 0.04 / 11
-    RETCgababsyns.append(gababsyn)                                                #TC[jbound].gababpost.append(gababsyn)
+    RETCgababsyns[jbound].append(gababsyn)                                        #TC[jbound].gababpost.append(gababsyn)
     ncon = h.NetCon( REsomas[i](0.5)._ref_v, gababsyn, 0, 2, 1, sec = REsomas[i]) #RE[i].soma TC[jbound].REgabablist.append(new NetCon(&v(0.5), gababsyn, 0, axondelay, 1))
     RETCnetcons.append(ncon)
 
-
-
-INPYgababsyns = []
+INPYgababsyns = [ [ ] ] * 100
 INPYnetcons = []
 for i in range(100):
   for j in range(i-5, i+5+1):
@@ -56,25 +54,25 @@ for i in range(100):
     gababsyn = h.GABAb_S()                                                         #gababsyn = new GABAb_S()
     gababsyn.loc(0.5, sec = PYsomas[jbound])                                       #PY[jbound].soma gababsyn.loc(0.5)
     gababsyn.gmax = 0.03 / 11
-    INPYgababsyns.append(gababsyn)                                                 #PY[jbound].gababpost.append(gababsyn) 
+    INPYgababsyns[jbound].append(gababsyn)                                         #PY[jbound].gababpost.append(gababsyn) 
     ncon = h.NetCon( INsomas[i](0.5)._ref_v, gababsyn, 0, 2, 1, sec = INsomas[i])  #IN[i].soma PY[jbound].INgabablist.append(new NetCon(&v(0.5), gababsyn, 0, axondelay, 1))
     INPYnetcons.append(ncon)
     #add for new set of IN cells
     gababsyn = h.GABAb_S()
     gababsyn.loc(0.5, sec = PYsomas[jbound])                                              #PY[jbound].soma gababsyn.loc(0.5)
     gababsyn.gmax = 0.03 / 11
-    INPYgababsyns.append(gababsyn)                                                        #PY[jbound].gababpost.append(gababsyn) 
+    INPYgababsyns[jbound].append(gababsyn)                                                #PY[jbound].gababpost.append(gababsyn) 
     ncon = h.NetCon( INsomas[i+100](0.5)._ref_v, gababsyn, 0, 2, 1, sec = INsomas[i+100]) #IN[i+100].soma PY[jbound].INgabablist.append(new NetCon(&v(0.5), gababsyn, 0, axondelay, 1))
     INPYnetcons.append(ncon)
 
 PYg = h.Vector()
-PYg.record()
+#PYg.record()
 PYi = h.Vector()
-PYi.record()
+#PYi.record()
 TCg = h.Vector()
-TCg.record()
+#TCg.record()
 TCi = h.Vector()
-TCi.record()
+#TCi.record()
 
 
 """
