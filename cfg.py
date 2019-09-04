@@ -17,7 +17,7 @@ simConfig.checkErrors=False # True #
 simConfig.trans = 0000
 simConfig.Dt = 0.1
 simConfig.steps_per_ms = 1/simConfig.Dt
-simConfig.npoints = 9000
+simConfig.npoints = 5000
 
 simConfig.duration = simConfig.npoints * simConfig.Dt # simConfig.trans + simConfig.npoints * simConfig.Dt # Duration of the simulation, in ms
 simConfig.dt = simConfig.Dt # Internal integration timestep to use

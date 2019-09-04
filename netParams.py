@@ -573,6 +573,7 @@ netParams.connParams['IN->PY_GABAA'] = {
     #'probability': IN_PY_GABAA_Prob}
     'connList': netcons['GABAa_S']['sIN->sPY']}
     #'connList': smallWorldConn(N_IN,N_PY,pCrx,IN_PY_GABAA_Prob)}   
+
 """
 netParams.connParams['IN->PY_GABAB'] = {
     'preConds': {'popLabel': 'IN'}, 
@@ -621,6 +622,7 @@ netParams.connParams['RE->TC_GABAA'] = {
     #'probability': RE_TC_GABAA_Prob}
     'connList': netcons['GABAa_S']['sRE->sTC']}
     #'connList': smallWorldConn(N_RE,N_TC,pThl,RE_TC_GABAA_Prob)}   
+
 """
 netParams.connParams['RE->TC_GABAB'] = {
     'preConds': {'popLabel': 'RE'}, 

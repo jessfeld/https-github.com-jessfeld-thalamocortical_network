@@ -1,6 +1,8 @@
 import netParams # import parameters file
 import cfg
 
+import json
+
 from netpyne import sim  # import netpyne init module
 from neuron import h
 
@@ -11,6 +13,7 @@ from neuron import h
 ###############################################################################
 
 (pops, cells, conns, rxd, stims, simData) = sim.create(netParams.netParams, cfg.simConfig, output=True)
+
 
 PYcells = sim.net.cells[  0:100]
 INcells = sim.net.cells[100:300]
@@ -66,21 +69,19 @@ for i in range(100):
     INPYnetcons.append(ncon)
 
 PYg = h.Vector()
-#PYg.record()
+PYg.record(INPYgababsyns[11][0]._ref_g)
 PYi = h.Vector()
-#PYi.record()
+PYi.record(INPYgababsyns[11][0]._ref_i)
 TCg = h.Vector()
-#TCg.record()
+TCg.record(RETCgababsyns[11][0]._ref_g)
 TCi = h.Vector()
-#TCi.record()
+TCi.record(RETCgababsyns[11][0]._ref_i)
 
 
 """
 sim.simulate()
 sim.analyze()
-"""
 
-"""
 ncl = h.List("NetCon")
 GABAbP = h.List("GABAb_S")
 GABAb = [x for x in ncl if 'GABAb' in str(x.syn())]
