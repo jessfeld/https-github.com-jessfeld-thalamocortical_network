@@ -17,7 +17,7 @@ simConfig.checkErrors=False # True #
 simConfig.trans = 0000
 simConfig.Dt = 0.1
 simConfig.steps_per_ms = 1/simConfig.Dt
-simConfig.npoints = 5000
+simConfig.npoints = 12500
 
 simConfig.duration = simConfig.npoints * simConfig.Dt # simConfig.trans + simConfig.npoints * simConfig.Dt # Duration of the simulation, in ms
 simConfig.dt = simConfig.Dt # Internal integration timestep to use
@@ -58,11 +58,11 @@ simConfig.saveFileStep = 1000 # step size in ms to save data to disk
 
 # Analysis and plotting 
 #simConfig.analysis['plotRaster'] = {'include': ['PY', 'IN', 'TC', 'RE'], 'orderInverse': True} #True # Whether or not to plot a raster
-simConfig.analysis['plotRaster'] = {'include': ['RE', 'TC', 'IN', 'PY'], 'orderInverse': False, 'showFig' : False, 'saveFig':'./images/raster%d%d%d_%s_%s_dose%d.png'%(nav_type,drug, dose*100, str_nav_type[nav_type], str_drug[drug], dose*100)} #True # Whether or not to plot a raster
+simConfig.analysis['plotRaster'] = {'include': ['RE', 'TC', 'IN', 'PY'], 'timeRange': [0, simConfig.duration], 'orderInverse': False, 'showFig' : False, 'saveFig':'./images/raster%d%d%d_%s_%s_dose%d.png'%(nav_type,drug, dose*100, str_nav_type[nav_type], str_drug[drug], dose*100)} #True # Whether or not to plot a raster
 
 #simConfig.analysis['plotRaster'] = True  # Plot raster
-simConfig.analysis['plotTraces'] = {'include': [('PY',[0+watchneuron]),('IN',[0+watchneuron]),('TC',[0+watchneuron]),('RE',[0+watchneuron])], 'timeRange': [0,simConfig.duration], 'oneFigPer': 'trace', 'overlay': False, 'showFig' : False, 'saveFig':'./images/plotTraces%d%d%d_%s_%s_dose%d.png'%(nav_type, drug, dose*100, str_nav_type[nav_type], str_drug[drug], dose*100)} # plot recorded traces for this list of cells
-
+simConfig.analysis['plotTraces'] = {'include': [('PY',[0+watchneuron]),('IN',[0+watchneuron]),('TC',[0+watchneuron]),('RE',[0+watchneuron])], 'timeRange': [0, simConfig.duration], 'oneFigPer': 'trace', 'overlay': True, 'showFig' : False, 'saveFig':'./images/plotTraces%d%d%d_%s_%s_dose%d.png'%(nav_type, drug, dose*100, str_nav_type[nav_type], str_drug[drug], dose*100)} # plot recorded traces for this list of cells
+#[0, simconfig.duration]
 #simConfig.analysis['plotRatePSD'] = {'include': ['PY', 'IN', 'TC', 'RE'], 'Fs': 50, 'smooth': 10} # plot recorded traces for this list of cells
 
 #simConfig.addAnalysis('plot2Dnet', {'include': ['PY', 'IN', 'TC', 'RE'],  'showConns': True, 'saveFig': './images/plot2Dnet.png', 'showFig': False})

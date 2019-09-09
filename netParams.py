@@ -518,7 +518,7 @@ netParams.stimTargetParams['Input_1->PY'] = {'source': 'Input_1', 'sec':'soma', 
 netParams.connParams['PY->PY_AMPA'] = {
     'preConds': {'popLabel': 'PY'}, 
     'postConds': {'popLabel': 'PY'},
-    'weight': PYPY*0.6/(N_PY*PY_PY_AMPA_Prob+1),            # (Destexhe, 1998)
+    'weight': 0.054545,        # PYPY*0.6/(N_PY*PY_PY_AMPA_Prob+1),            # (Destexhe, 1998)
     #'weight': 0.6,            # (Destexhe, 1998)
     'sec': 'soma',
     'delay': netParams.axondelay, 
@@ -533,7 +533,7 @@ netParams.connParams['PY->PY_AMPA'] = {
 netParams.connParams['PY->IN_AMPA'] = {
     'preConds': {'popLabel': 'PY'}, 
     'postConds': {'popLabel': 'IN'},
-    'weight': PYIN*0.2/(N_IN*PY_IN_AMPA_Prob+1),            # (Destexhe, 1998)       
+    'weight': 0.018182,        # PYIN*0.2/(N_IN*PY_IN_AMPA_Prob+1),            # (Destexhe, 1998)       
     #'weight': 0.2,            # (Destexhe, 1998)       
     'sec': 'soma',
     'delay': netParams.axondelay, 
@@ -548,7 +548,7 @@ netParams.connParams['PY->IN_AMPA'] = {
 netParams.connParams['IN->IN_GABAA'] = {
     'preConds': {'popLabel': 'IN'}, 
     'postConds': {'popLabel': 'IN'},
-    'weight': ININa*1/(N_IN*IN_IN_GABAA_Prob+1),       
+    'weight': 0,               # ININa*1/(N_IN*IN_IN_GABAA_Prob+1),       
     #'weight': gabaapercent*0.15,         # (Destexhe, 1998)
     'sec': 'soma',
     'delay': netParams.axondelay, 
@@ -563,7 +563,7 @@ netParams.connParams['IN->IN_GABAA'] = {
 netParams.connParams['IN->PY_GABAA'] = {
     'preConds': {'popLabel': 'IN'}, 
     'postConds': {'popLabel': 'PY'},
-    'weight': INPYa*gabaapercent*0.3/(N_PY*IN_PY_GABAA_Prob+1),         # (Destexhe, 1998)
+    'weight': 0.02727 * gabaapercent,     # INPYa*gabaapercent*0.3/(N_PY*IN_PY_GABAA_Prob+1),         # (Destexhe, 1998)
     #'weight': gabaapercent*0.15,         # (Destexhe, 1998)
     'sec': 'soma',
     'delay': netParams.axondelay, 
@@ -597,7 +597,7 @@ netParams.connParams['IN->PY_GABAB'] = {
 netParams.connParams['TC->RE'] = {
     'preConds': {'popLabel': 'TC'}, 
     'postConds': {'popLabel': 'RE'},
-    'weight': TCRE*0.2/(N_RE*TC_RE_AMPA_Prob+1),         # (Destexhe, 1998)  
+    'weight': 0.018182,     # TCRE*0.2/(N_RE*TC_RE_AMPA_Prob+1),         # (Destexhe, 1998)  
     #'weight': 0.2,         # (Destexhe, 1998)  
     'sec': 'soma',
     'delay': netParams.axondelay, 
@@ -612,8 +612,8 @@ netParams.connParams['TC->RE'] = {
 netParams.connParams['RE->TC_GABAA'] = {
     'preConds': {'popLabel': 'RE'}, 
     'postConds': {'popLabel': 'TC'},
-    'weight': RETCa*gabaapercent*0.02/(N_TC*RE_TC_GABAA_Prob+1),         # (Destexhe, 1998)
-    #'weight': 0.02,         # (Destexhe, 1998)
+    'weight': 0.00182 * gabaapercent,   # RETCa*gabaapercent*0.02/(N_TC*RE_TC_GABAA_Prob+1),         # (Destexhe, 1998)
+    #'weight': 0.02,                    # (Destexhe, 1998)
     'sec': 'soma',
     'delay': netParams.axondelay, 
     'loc': 0.5,
@@ -645,7 +645,7 @@ netParams.connParams['RE->TC_GABAB'] = {
 netParams.connParams['RE->RE'] = {
     'preConds': {'popLabel': 'RE'}, 
     'postConds': {'popLabel': 'RE'},
-    'weight': RERE*0.2/(N_RE*RE_RE_GABAA_Prob+1),            # (Destexhe, 1998)
+    'weight': 0.018182,        # RERE*0.2/(N_RE*RE_RE_GABAA_Prob+1),            # (Destexhe, 1998)
     #'weight': 0.2,            # (Destexhe, 1998)
     'delay': netParams.axondelay, 
     'loc': 0.5,
@@ -664,7 +664,7 @@ netParams.connParams['RE->RE'] = {
 netParams.connParams['PY->TC'] = {
     'preConds': {'popLabel': 'PY'}, 
     'postConds': {'popLabel': 'TC'},
-    'weight': PYTC*0.01/(N_TC*PY_TC_AMPA_Prob+1),           # (Destexhe, 1998)    
+    'weight': 0.000476,        # PYTC*0.01/(N_TC*PY_TC_AMPA_Prob+1),           # (Destexhe, 1998)    
     #'weight': 0.01,           # (Destexhe, 1998)    
     'delay': netParams.axondelay, 
     'loc': 0.5,
@@ -677,7 +677,7 @@ netParams.connParams['PY->TC'] = {
 netParams.connParams['PY->RE'] = {
     'preConds': {'popLabel': 'PY'}, 
     'postConds': {'popLabel': 'RE'},
-    'weight': PYRE*1.2/(N_RE*PY_RE_AMPA_Prob+1),           # (Destexhe, 1998)  
+    'weight': 0.057143,       # PYRE*1.2/(N_RE*PY_RE_AMPA_Prob+1),           # (Destexhe, 1998)  
     #'weight': 1.2,           # (Destexhe, 1998)  
     'delay': netParams.axondelay, 
     'loc': 0.5,
@@ -690,7 +690,7 @@ netParams.connParams['PY->RE'] = {
 netParams.connParams['TC->PY'] = {
     'preConds': {'popLabel': 'TC'}, 
     'postConds': {'popLabel': 'PY'},
-    'weight': TCPY*1.2/(N_PY*TC_PY_AMPA_Prob+1),        # (Destexhe, 1998)   
+    'weight': 0.057143,    # TCPY*1.2/(N_PY*TC_PY_AMPA_Prob+1),        # (Destexhe, 1998)   
     #'weight': 1.2,        # (Destexhe, 1998)   
     'delay': netParams.axondelay, 
     'loc': 0.5,
