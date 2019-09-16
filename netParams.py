@@ -29,166 +29,42 @@ import numpy as np
 import json
 from settings import nav_type, drug, dose
 
-def smallWorldConn(NPre, NPost, p, K, selfConn=True):
-    ''' k is smallwordness parameters
-    K is ratio of connections from each pre cell to post cells
-    if p=0 regular network
-    if p between 0 and 1 small-world network and
-    if p=1 random network 
-    '''
-    connMat=[]
-    for i in range(NPre):
-        for j in np.arange(i-int(np.ceil(NPost*K/2)),i+int(np.ceil(NPost*K/2))+1): # line-like neighborhood
+def mkConnList( n, diam ):
+    connList = []
+    for i in range(n):
+        for j in range(i-diam, i+diam+1):
+            jbound = j                      # boundary cell conditions
+            if (jbound < 0):
+                jbound = abs(j) - 1
+            if (jbound > (n-1)):
+                jbound = 2 * n - jbound - 1
+            connList.append( [i, jbound] )
+    return connList
+
+def mkConnListCT( nPre, nPost, diam, divergence):   #corticothalamic
+    connList = []
+    for i in range(0, nPre, divergence):        #divergence should be integer
+        for j in range( int(i/divergence)-diam, int(i/divergence)+diam+1):
             jbound = j
-            if jbound < 0: jbound = abs(j) - 1
-            if jbound > NPost-1: jbound = 2 * NPost - jbound - 1 
-            #if (jbound >= 0 and jbound <= NPost-1):
-            if i!=jbound or selfConn:
-                connMat.append([i,jbound])
-            
-    if p:
-        connects = [x for x in range(len(connMat))]
-        rnd_ind = rnd.sample(connects, int(len(connMat)*p))
-        for i in rnd_ind:
-            connMat[i][1]=rnd.randint(0,NPost-1)
-    return connMat
+            if (jbound < 0):
+                jbound = abs(j) - 1
+            if (jbound > (nPost - 1)):
+                jbound = 2 * nPost - jbound - 1
+            connList.append( [ int(i+divergence/2), jbound ] )
+    return connList
 
-def smallWorldConnL(NPre, NPost, p, K):
-    ''' k is smallwordness parameters
-    K is ratio of connections from each pre cell to post cells
-    if p=0 regular network
-    if p between 0 and 1 small-world network and
-    if p=1 random network 
-    '''
-    connMat=[]
-    for i in range(NPre):
-        #for j in np.arange(-1*int(np.ceil(NPost*K/2)),int(np.ceil(NPost*K/2))+1): # ring-like neighborhood
-            #connMat.append([i,(NPost + i + j) % NPost]) # ring like
-        for j in np.arange(i-0*int(np.ceil(NPost*K/2)),i+0*int(np.ceil(NPost*K/2))+1): # line-like neighborhood
+def mkConnListTC( nPre, nPost, diam, divergence):   #thalamocortical
+    connList = []
+    for i in range(nPre):
+        for j in range( ( divergence * (i-diam) ), ( divergence * (i+diam+1) ), divergence ): #divergence should be integer
             jbound = j
-            #if jbound < 0: jbound = abs(j) - 1
-            #if jbound > NPost-1: jbound = 2 * NPost - jbound - 1 
-            if (jbound >= 0 and jbound <= NPost-1):
-                connMat.append([i,jbound])
-            
-    if p:
-        connects = [x for x in range(len(connMat))]
-        rnd_ind = rnd.sample(connects, int(len(connMat)*p))
-        for i in rnd_ind:
-            connMat[i][1]=rnd.randint(0,NPost-1)
-    return connMat
-
-def RegularConn2005(NPre, NPost):
-    ''' 
-        trying a 1-1 connection, from NPre[i] to NPost[i+100] and vice versa	
-    '''
-    connMat=[]
-    mid=int(NPost/2)
-    for i in range(mid):
-        connMat.append([i,mid+i])
-        connMat.append([mid+i,i])
-    return connMat
-
-def printWeight():
-    # intra-cortical
-    print("PYPY-AMPA_weight = ", netParams.connParams['PY->PY_AMPA']['weight'])
-    print("PYIN-AMPA_weight = ", netParams.connParams['PY->IN_AMPA']['weight'])
-    print("ININ-GABAA_weight = ", netParams.connParams['IN->IN_GABAA']['weight'])
-    print("INPY-GABAA_weight = ", netParams.connParams['IN->PY_GABAA']['weight'])
-    print("INPY-GABAB_weight = ", netParams.synMechParams['GABAB_S1']['gmax'])
-    #print("INPY-GABAB_weight = ", netParams.connParams['IN->PY_GABAB']['weight'])
-    
-    # intra-thalamic
-    print("TCRE-AMPA_weight = ", netParams.connParams['TC->RE']['weight'])
-    print("RETC-GABAA_weight = ", netParams.connParams['RE->TC_GABAA']['weight'])
-    print("RETC-GABAB_weight = ", netParams.synMechParams['GABAB_S2']['gmax'])
-    #print("RETC-GABAB_weight = ", netParams.connParams['RE->TC_GABAB']['weight'])
-    print("RERE-GABAA_weight = ", netParams.connParams['RE->RE']['weight'])
-    
-    # thalamo-cortical 
-    print("PYTC-AMPA_weight = ", netParams.connParams['PY->TC']['weight'])
-    print("PYRE-AMPA_weight = ", netParams.connParams['PY->RE']['weight'])
-    print("TCPY-AMPA_weight = ", netParams.connParams['TC->PY']['weight'])
-    print("TCIN-AMPA_weight = ", netParams.connParams['TC->IN']['weight'])
-
-def printPYinfo(cellParams):
-    print(" ")
-    print("------ PY Parameter values ---------")
-    print(" ")
-    
-    print("diam=",cellParams.secs.soma.geom.diam,"\t L=",cellParams.secs.soma.geom.L," \t Cm=",cellParams.secs.soma.geom.cm," \t Ra=",cellParams.secs.soma.geom.Ra)
-    print("g_pas=",cellParams.secs.soma.mechs.pas.g," \t e_pas=",cellParams.secs.soma.mechs.pas.e," \t vinit=", cellParams.secs.soma.vinit)
-    print("gnabar_hh2=",cellParams.secs.soma.mechs.hh2.gnabar," \t ena=", cellParams.secs.soma.ions.na.e)
-    print("gkbar_hh2=",cellParams.secs.soma.mechs.hh2.gkbar," \t ek=",cellParams.secs.soma.ions.k.e," \t vtraub_hh2=", cellParams.secs.soma.mechs.hh2.vtraub)
-    print("gkbar_im=",cellParams.secs.soma.mechs.im.gkbar," \t taumax_im=",cellParams.secs.soma.mechs.im.taumax)
-    
-    print(" ")
-    print("-------- PY Parameter values (end) --------")
-    print(" ")
-
-def printINinfo(cellParams):
-    print(" ")
-    print("------ IN Parameter values ---------")
-    print(" ")
-    
-    print("diam=",cellParams.secs.soma.geom.diam,"\t L=",cellParams.secs.soma.geom.L," \t Cm=",cellParams.secs.soma.geom.cm," \t Ra=",cellParams.secs.soma.geom.Ra)
-    print("g_pas=",cellParams.secs.soma.mechs.pas.g," \t e_pas=",cellParams.secs.soma.mechs.pas.e," \t vinit=", cellParams.secs.soma.vinit)
-    print("ena=", cellParams.secs.soma.ions.na.e," \t ek=",cellParams.secs.soma.ions.k.e)
-    print("svhalf_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.svhalf, "\t sk_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.sk," \t staubase_inak2005mut=", cellParams.secs.soma.mechs.inak2005mut.staubase)
-    
-    print("mvhalf_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.mvhalf, "\t mk_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.mk," \t mtaubase_inak2005mut=", cellParams.secs.soma.mechs.inak2005mut.mtaubase)
-    print("hvhalf_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.hvhalf, "\t hk_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.hk," \t htaubase_inak2005mut=", cellParams.secs.soma.mechs.inak2005mut.htaubase)
-    print("htauvhalf_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.htauvhalf, "\t htauk_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.htauk)
-    print("stauvhalf_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.stauvhalf, "\t stauk_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.stauk)
-    print("gnatbar_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.gnatbar, "\t gkfbar_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.gkfbar)
-
-    print("gnablock_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.gnablock, "\t hshift_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.hshift)
-    print("htaubase_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.htaubase, "\t staubase_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.staubase, "\t sshift_inak2005mut=",cellParams.secs.soma.mechs.inak2005mut.sshift)
-    print("gnablock_inak2005=",cellParams.secs.soma.mechs.inak2005.gnablock, "\t hshift_inak2005=",cellParams.secs.soma.mechs.inak2005.hshift)
-    print("htaubase_inak2005=",cellParams.secs.soma.mechs.inak2005.htaubase, "\t staubase_inak2005=",cellParams.secs.soma.mechs.inak2005.staubase, "\t sshift_inak2005=",cellParams.secs.soma.mechs.inak2005.sshift)
-
-
-    print(" ")
-    print("-------- IN Parameter values (end) --------")
-    print(" ")
-
-def printTCinfo(cellParams):
-    print(" ")
-    print("----- TC Parameter values -------")
-    print(" ")
-    
-    print("diam=",cellParams.secs.soma.geom.diam,"\t L=",cellParams.secs.soma.geom.L," \t Cm=",cellParams.secs.soma.geom.cm," \t Ra=",cellParams.secs.soma.geom.Ra)
-    print("kl_gmax=",cellParams.secs.soma.pointps.kleak_0.gmax,"\t Erev_kleak=",cellParams.secs.soma.pointps.kleak_0.Erev_kleak)
-    print("g_pas=",cellParams.secs.soma.mechs.pas.g," \t e_pas=",cellParams.secs.soma.mechs.pas.e," \t vinit=", cellParams.secs.soma.vinit)
-    print("gnabar_hh2=",cellParams.secs.soma.mechs.hh2.gnabar," \t ena=", cellParams.secs.soma.ions.na.e)
-    print("gkbar_hh2=",cellParams.secs.soma.mechs.hh2.gkbar," \t ek=",cellParams.secs.soma.ions.k.e," \t vtraub_hh2=", cellParams.secs.soma.mechs.hh2.vtraub)
-    print("gcabar_it=",cellParams.secs.soma.mechs.it.gcabar," \t eca=",cellParams.secs.soma.ions.ca.e," \t cai=", cellParams.secs.soma.ions.ca.i," \t cao=", cellParams.secs.soma.ions.ca.o)
-    print("shift_it=",cellParams.secs.soma.mechs.it.shift," \t taubase_it=",cellParams.secs.soma.mechs.it.taubase)
-    print("depth_cad=",cellParams.secs.soma.mechs.cad.depth," \t taur_cad=",cellParams.secs.soma.mechs.cad.taur," \t cainf_cad=", cellParams.secs.soma.mechs.cad.cainf," \t kt_cad=", cellParams.secs.soma.mechs.cad.kt)
-    print("ghbar_iar=",cellParams.secs.soma.mechs.iar.ghbar," \t eh=",cellParams.secs.soma.ions.h.e," \t nca_iar=", cellParams.secs.soma.mechs.iar.nca," \t k2_iar=", cellParams.secs.soma.mechs.iar.k2)
-    print("cac_iar=",cellParams.secs.soma.mechs.iar.cac," \t nexp_iar=",cellParams.secs.soma.mechs.iar.nexp," \t k4_iar=", cellParams.secs.soma.mechs.iar.k4," \t Pc_iar=", cellParams.secs.soma.mechs.iar.Pc," \t ginc_iar=", cellParams.secs.soma.mechs.iar.ginc)
-
-    print(" ")
-    print("----- TC Parameter values (end) -------")
-    print(" ")
-
-
-def printREinfo(cellParams):
-    print(" ")
-    print("------ RE Parameter values ---------")
-    print(" ")
-    
-    print("diam=",cellParams.secs.soma.geom.diam,"\t L=",cellParams.secs.soma.geom.L," \t Cm=",cellParams.secs.soma.geom.cm," \t Ra=",cellParams.secs.soma.geom.Ra)
-    print("g_pas=",cellParams.secs.soma.mechs.pas.g," \t e_pas=",cellParams.secs.soma.mechs.pas.e," \t vinit=", cellParams.secs.soma.vinit)
-    print("gnabar_hh2=",cellParams.secs.soma.mechs.hh2.gnabar," \t ena=", cellParams.secs.soma.ions.na.e)
-    print("gkbar_hh2=",cellParams.secs.soma.mechs.hh2.gkbar," \t ek=",cellParams.secs.soma.ions.k.e," \t vtraub_hh2=", cellParams.secs.soma.mechs.hh2.vtraub)
-    print("gcabar_it2=",cellParams.secs.soma.mechs.it2.gcabar," \t eca=",cellParams.secs.soma.ions.ca.e," \t cai=", cellParams.secs.soma.ions.ca.i," \t cao=", cellParams.secs.soma.ions.ca.o)
-    print("shift_it2=",cellParams.secs.soma.mechs.it2.shift," \t taubase_it2=",cellParams.secs.soma.mechs.it2.taubase," \t qm_it2=", cellParams.secs.soma.mechs.it2.qm," \t qh_it2=", cellParams.secs.soma.mechs.it2.qh)
-    print("depth_cad=",cellParams.secs.soma.mechs.cad.depth," \t taur_cad=",cellParams.secs.soma.mechs.cad.taur," \t cainf_cad=", cellParams.secs.soma.mechs.cad.cainf," \t kt_cad=", cellParams.secs.soma.mechs.cad.kt)
-    
-    print(" ")
-    print("-------- RE Parameter values (end) --------")
-    print(" ")
+            if (jbound < 0):
+                jbound = abs(j) - divergence
+            if (jbound > (nPost - 1)):
+                jbound = 2 * nPost - jbound - divergence
+            connList.append( [i , int(jbound + divergence / 2)])
+    return connList
+                
 
 
 ###############################################################################
@@ -196,23 +72,6 @@ def printREinfo(cellParams):
 # MPI HH TUTORIAL PARAMS
 #
 ###############################################################################
-
-p=0*1.0; pCrx=p; pThl=p; pThlCrx=p # small-world-ness param
-#K=0.1 # connectivity param
-
-intraCrxProb=0.1
-PY_PY_AMPA_Prob=intraCrxProb;PY_IN_AMPA_Prob=intraCrxProb;
-PY_PY_NMDA_Prob=intraCrxProb;PY_IN_NMDA_Prob=intraCrxProb;
-IN_PY_GABAA_Prob=intraCrxProb;IN_PY_GABAB_Prob=intraCrxProb;
-IN_IN_GABAA_Prob=intraCrxProb;
-
-intraThlProb=0.1
-TC_RE_AMPA_Prob=intraThlProb;RE_TC_GABAA_Prob=intraThlProb;
-RE_TC_GABAB_Prob=intraThlProb;RE_RE_GABAA_Prob=intraThlProb;
-
-ThlCrxProb=0.2
-PY_TC_AMPA_Prob=ThlCrxProb;PY_RE_AMPA_Prob=ThlCrxProb;
-TC_PY_AMPA_Prob=ThlCrxProb;TC_IN_AMPA_Prob=ThlCrxProb;
 
 stimtime = 10050
 
@@ -225,21 +84,21 @@ gabaapercent = 0.1
 gababpercent = 1
 
 
-PYPY    = 1*1
-PYIN    = 1*1
-ININa   = 1*1
-INPYa   = 1*1
-INPYb   = 1*1
+PYPY    = 1
+PYIN    = 1
+ININa   = 1
+INPYa   = 1
+INPYb   = 1
 
-TCRE    = 1*1
-RETCa   = 1*1
-RETCb   = 1*1
-RERE    = 1*1
+TCRE    = 1
+RETCa   = 1
+RETCb   = 1
+RERE    = 1
 
-PYTC    = 1*1
-PYRE    = 1*1
-TCPY    = 1*1
-TCIN    = 1*1
+PYTC    = 1
+PYRE    = 1
+TCPY    = 1
+TCIN    = 1
 
 #INPYb*0.03/(N_PY*IN_PY_GABAB_Prob+1)} #0.5}#0.002727}# }  # GABAB
 #RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1)} #0.5}#0.003636}# }  # GABAB
@@ -252,9 +111,10 @@ TCgmax = 0.04/11 * 1
 ###############################################################################
 N=100; N_PY=N; N_IN=2*N; N_TC=N; N_RE=N;
 #N=100; N_PY=N; N_IN=N/4; N_TC=N/2; N_RE=N/2;
-
-netParams.narrowdiam = 5
-netParams.widediam = 10
+ncorticalcells = 100
+nthalamiccells = 100
+narrowdiam = 5
+widediam = 10
 
 netParams.xspacing = 20 # um
 netParams.yspacing = 100 # um
@@ -273,12 +133,12 @@ with open('netcons.json', 'r') as fp:
 # Population parameters
 ###############################################################################
 ### Cortical Cells
-netParams.popParams['PY'] = {'cellType': 'PY', 'numCells': N_PY, 'cellModel': 'HH_PY', 'ynormRange': [0.1, 0.3]} #, 'yRange': [1*netParams.yspacing,1*netParams.yspacing], 'gridSpacing': netParams.xspacing}
-netParams.popParams['IN'] = {'cellType': 'IN', 'numCells': N_IN, 'cellModel': 'HH_IN', 'ynormRange': [0.35, 0.55]} #, 'yRange': [2*netParams.yspacing,2*netParams.yspacing], 'gridSpacing': netParams.xspacing} 
+netParams.popParams['PY'] = {'cellType': 'PY', 'numCells': ncorticalcells, 'cellModel': 'HH_PY', 'ynormRange': [0.1, 0.3]} #, 'yRange': [1*netParams.yspacing,1*netParams.yspacing], 'gridSpacing': netParams.xspacing}
+netParams.popParams['IN'] = {'cellType': 'IN', 'numCells': (ncorticalcells * 2), 'cellModel': 'HH_IN', 'ynormRange': [0.35, 0.55]} #, 'yRange': [2*netParams.yspacing,2*netParams.yspacing], 'gridSpacing': netParams.xspacing} 
 
 ### Thalamic cells    
-netParams.popParams['TC'] = {'cellType': 'TC', 'numCells': N_TC, 'cellModel': 'HH_TC', 'ynormRange': [0.65, 0.75]} #, 'yRange': [2+3*netParams.yspacing,2+3*netParams.yspacing], 'gridSpacing': netParams.xspacing}
-netParams.popParams['RE'] = {'cellType': 'RE', 'numCells': N_RE, 'cellModel': 'HH_RE', 'ynormRange': [0.8, 0.9]} #, 'yRange': [2+4*netParams.yspacing,2+4*netParams.yspacing], 'gridSpacing': netParams.xspacing}
+netParams.popParams['TC'] = {'cellType': 'TC', 'numCells': nthalamiccells, 'cellModel': 'HH_TC', 'ynormRange': [0.65, 0.75]} #, 'yRange': [2+3*netParams.yspacing,2+3*netParams.yspacing], 'gridSpacing': netParams.xspacing}
+netParams.popParams['RE'] = {'cellType': 'RE', 'numCells': nthalamiccells, 'cellModel': 'HH_RE', 'ynormRange': [0.8, 0.9]} #, 'yRange': [2+4*netParams.yspacing,2+4*netParams.yspacing], 'gridSpacing': netParams.xspacing}
 
 
 ###############################################################################
@@ -491,8 +351,8 @@ netParams.synMechParams['GABAA_S'] = {'mod': 'GABAa_S', 'Cmax': 0.5, 'Cdur': 0.3
 
 # GABAb_S
 #netParams.synMechParams['GABAB'] = {'mod': 'Exp2Syn', 'tau1': 0.07, 'tau2': 9.1, 'e': -80}  # GABAB
-netParams.synMechParams['GABAB_S1'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': PYgmax }#INPYb*0.03/(N_PY*IN_PY_GABAB_Prob+1)} #0.5}#0.002727}# }  # GABAB
-netParams.synMechParams['GABAB_S2'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': TCgmax }#RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1)} #0.5}#0.003636}# }  # GABAB
+#netParams.synMechParams['GABAB_S1'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': PYgmax }#INPYb*0.03/(N_PY*IN_PY_GABAB_Prob+1)} #0.5}#0.002727}# }  # GABAB
+#netParams.synMechParams['GABAB_S2'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': TCgmax }#RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1)} #0.5}#0.003636}# }  # GABAB
 
 #netParams.synMechParams['GABAB_S'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.52, 'K2': 0.0045, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'Erev': -95} # }  # GABAB
 
@@ -514,6 +374,11 @@ netParams.stimTargetParams['Input_1->PY'] = {'source': 'Input_1', 'sec':'soma', 
 ###############################################################################
 
 ####################### intra cortical projections ############################
+divergence = 1
+cLcortical = mkConnList( ncorticalcells, narrowdiam)
+cLthalamic = mkConnList( nthalamiccells, narrowdiam)
+cLcortthal = mkConnListCT( ncorticalcells, nthalamiccells, widediam, divergence) #cortical -> thalamic projections
+cLthalcort = mkConnListTC( nthalamiccells, ncorticalcells, widediam, divergence) #thalamic -> cortical projections
 
 netParams.connParams['PY->PY_AMPA'] = {
     'preConds': {'popLabel': 'PY'}, 
@@ -524,12 +389,11 @@ netParams.connParams['PY->PY_AMPA'] = {
     'delay': netParams.axondelay, 
     'loc': 0.5,
     'synMech': 'AMPA_S',
-    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-    #'probability': PY_PY_AMPA_Prob}
-    'connList': netcons['AMPA_S']['sPY->sPY']}
+    'connList': cLcortical}
+    #'connList': netcons['AMPA_S']['sPY->sPY']}
     #'connList': smallWorldConn(N_PY,N_PY,pCrx,PY_PY_AMPA_Prob,selfConn)}
        
-
+PYINconnlist = cLcortical + [ [x, y + 100] for x, y in cLcortical ]
 netParams.connParams['PY->IN_AMPA'] = {
     'preConds': {'popLabel': 'PY'}, 
     'postConds': {'popLabel': 'IN'},
@@ -541,10 +405,11 @@ netParams.connParams['PY->IN_AMPA'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': PY_IN_AMPA_Prob}
-    'connList': netcons['AMPA_S']['sPY->sIN']}
+    'connList': PYINconnlist}
+    #'connList': netcons['AMPA_S']['sPY->sIN']}
     #'connList': smallWorldConn(N_PY,N_IN,pCrx,PY_IN_AMPA_Prob)}   
 
-
+ININconnlist = [ [ x, x + 100] for x in range(100) ] + [ [ x + 100, x] for x in range(100) ]
 netParams.connParams['IN->IN_GABAA'] = {
     'preConds': {'popLabel': 'IN'}, 
     'postConds': {'popLabel': 'IN'},
@@ -556,10 +421,11 @@ netParams.connParams['IN->IN_GABAA'] = {
     'synMech': 'GABAA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': IN_PY_GABAA_Prob}
-    'connList': netcons['GABAa_S']['sIN->sIN']}
+    'connList': ININconnlist}
+    #'connList': netcons['GABAa_S']['sIN->sIN']}
     #'connList': RegularConn2005(N_IN,N_PY)}   
 
-
+INPYconnlist = cLcortical + [ [x + 100, y] for x, y in cLcortical ]
 netParams.connParams['IN->PY_GABAA'] = {
     'preConds': {'popLabel': 'IN'}, 
     'postConds': {'popLabel': 'PY'},
@@ -571,7 +437,8 @@ netParams.connParams['IN->PY_GABAA'] = {
     'synMech': 'GABAA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': IN_PY_GABAA_Prob}
-    'connList': netcons['GABAa_S']['sIN->sPY']}
+    'connList': INPYconnlist}
+    #'connList': netcons['GABAa_S']['sIN->sPY']}
     #'connList': smallWorldConn(N_IN,N_PY,pCrx,IN_PY_GABAA_Prob)}   
 
 """
@@ -606,7 +473,8 @@ netParams.connParams['TC->RE'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': TC_RE_AMPA_Prob}
-    'connList': netcons['AMPA_S']['sTC->sRE']}
+    'connList': cLthalamic}
+    #'connList': netcons['AMPA_S']['sTC->sRE']}
     #'connList': smallWorldConn(N_TC,N_RE,pThl,TC_RE_AMPA_Prob)}
 
 netParams.connParams['RE->TC_GABAA'] = {
@@ -620,7 +488,8 @@ netParams.connParams['RE->TC_GABAA'] = {
     'synMech': 'GABAA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': RE_TC_GABAA_Prob}
-    'connList': netcons['GABAa_S']['sRE->sTC']}
+    'connList': cLthalamic}
+    #'connList': netcons['GABAa_S']['sRE->sTC']}
     #'connList': smallWorldConn(N_RE,N_TC,pThl,RE_TC_GABAA_Prob)}   
 
 """
@@ -655,11 +524,12 @@ netParams.connParams['RE->RE'] = {
     #'synsPerConn': 1,
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': RE_RE_GABAA_Prob}
-    'connList': netcons['GABAa_S']['sRE->sRE']}
+    'connList': cLthalamic}
+    #'connList': netcons['GABAa_S']['sRE->sRE']}
     #'connList': smallWorldConn(N_RE,N_RE,pThl,RE_RE_GABAA_Prob,selfConn)}   
 
 ################# thalamo-cortical projections ################################
-
+divergence = ncorticalcells/nthalamiccells
 
 netParams.connParams['PY->TC'] = {
     'preConds': {'popLabel': 'PY'}, 
@@ -671,7 +541,8 @@ netParams.connParams['PY->TC'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': PY_TC_AMPA_Prob}
-    'connList': netcons['AMPA_S']['sPY->sTC']}
+    'connList': cLcortthal}
+    #'connList': netcons['AMPA_S']['sPY->sTC']}
     #'connList': smallWorldConn(N_PY,N_TC,pThlCrx,PY_TC_AMPA_Prob)}   
 
 netParams.connParams['PY->RE'] = {
@@ -684,7 +555,8 @@ netParams.connParams['PY->RE'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': PY_RE_AMPA_Prob}
-    'connList': netcons['AMPA_S']['sPY->sRE']}
+    'connList': cLcortthal}
+    #'connList': netcons['AMPA_S']['sPY->sRE']}
     #'connList': smallWorldConn(N_PY,N_RE,pThlCrx,PY_RE_AMPA_Prob)}   
 
 netParams.connParams['TC->PY'] = {
@@ -697,7 +569,8 @@ netParams.connParams['TC->PY'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': TC_PY_AMPA_Prob}
-    'connList': netcons['AMPA_S']['sTC->sPY']}
+    'connList': cLthalcort}
+    #'connList': netcons['AMPA_S']['sTC->sPY']}
     #'connList': smallWorldConn(N_TC,N_PY,pThlCrx,TC_PY_AMPA_Prob)}   
 
 
