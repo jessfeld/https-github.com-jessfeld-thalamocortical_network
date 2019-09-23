@@ -13,11 +13,15 @@ simConfig = specs.SimConfig()   # object of class SimConfig to store the simulat
 celsius = 36
 v_init = -70
 # Simulation parameters
+simConfig.allowSelfConns = True
 simConfig.checkErrors=False # True # 
 simConfig.trans = 0000
 simConfig.Dt = 0.1
 simConfig.steps_per_ms = 1/simConfig.Dt
-simConfig.npoints = 12500 # 12500
+simConfig.npoints = 6000 # 12500
+
+graphstart = simConfig.npoints / 10 - 30 #0
+graphstop  = simConfig.npoints / 10 #simConfig.duration
 
 simConfig.duration = simConfig.npoints * simConfig.Dt # simConfig.trans + simConfig.npoints * simConfig.Dt # Duration of the simulation, in ms
 simConfig.dt = simConfig.Dt # Internal integration timestep to use
@@ -27,7 +31,7 @@ simConfig.seeds = {'conn': 1, 'stim': 1, 'loc': 1} # Seeds for randomizers (conn
 simConfig.verbose = False # True  # show detailed messages 
 
 # Recording 
-simConfig.recordCells = []  # which cells to record from
+simConfig.recordCells = [x for x in range(500)]  # which cells to record from
 
 simConfig.recordTraces = {'V_soma':{'sec':'soma','loc':0.5,'var':'v'}
                           #'i_AMPA': {'sec':'soma', 'loc':0.5, 'synMech': 'AMPA_S', 'var': 'i', 'conds': {'pop': ['RE', 'TC', 'IN', 'PY']}},
@@ -58,10 +62,10 @@ simConfig.saveFileStep = 1000 # step size in ms to save data to disk
 
 # Analysis and plotting 
 #simConfig.analysis['plotRaster'] = {'include': ['PY', 'IN', 'TC', 'RE'], 'orderInverse': True} #True # Whether or not to plot a raster
-simConfig.analysis['plotRaster'] = {'include': ['RE', 'TC', 'IN', 'PY'], 'timeRange': [0, simConfig.duration], 'orderInverse': False, 'showFig' : False, 'saveFig':'./images/raster%d%d%d_%s_%s_dose%d.png'%(nav_type,drug, dose*100, str_nav_type[nav_type], str_drug[drug], dose*100)} #True # Whether or not to plot a raster
+simConfig.analysis['plotRaster'] = {'include': ['RE', 'TC', 'IN', 'PY'], 'timeRange': [graphstart, graphstop], 'orderInverse': False, 'showFig' : False, 'saveFig':'./images/raster%d%d%d_%s_%s_dose%d.png'%(nav_type,drug, dose*100, str_nav_type[nav_type], str_drug[drug], dose*100)} #True # Whether or not to plot a raster
 
 #simConfig.analysis['plotRaster'] = True  # Plot raster
-simConfig.analysis['plotTraces'] = {'include': [('PY',[0+watchneuron]),('IN',[0+watchneuron]),('TC',[0+watchneuron]),('RE',[0+watchneuron])], 'timeRange': [0, simConfig.duration], 'oneFigPer': 'trace', 'overlay': True, 'showFig' : False, 'saveFig':'./images/plotTraces%d%d%d_%s_%s_dose%d.png'%(nav_type, drug, dose*100, str_nav_type[nav_type], str_drug[drug], dose*100)} # plot recorded traces for this list of cells
+simConfig.analysis['plotTraces'] = {'include': [('PY',[0+watchneuron]),('IN',[0+watchneuron]),('TC',[0+watchneuron]),('RE',[0+watchneuron])], 'timeRange': [graphstart, graphstop], 'oneFigPer': 'trace', 'overlay': True, 'showFig' : False, 'saveFig':'./images/plotTraces%d%d%d_%s_%s_dose%d.png'%(nav_type, drug, dose*100, str_nav_type[nav_type], str_drug[drug], dose*100)} # plot recorded traces for this list of cells
 #[0, simconfig.duration]
 #simConfig.analysis['plotRatePSD'] = {'include': ['PY', 'IN', 'TC', 'RE'], 'Fs': 50, 'smooth': 10} # plot recorded traces for this list of cells
 
