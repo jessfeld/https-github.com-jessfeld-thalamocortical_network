@@ -1,25 +1,27 @@
 import netParams # import parameters file
 import cfg
 
+import os
 import json
 import re
-import pickle
 
 from netpyne import sim  # import netpyne init module
 from neuron import h
 
-#sim.createSimulateAnalyze(netParams = netParams.netParams, simConfig = cfg.simConfig)  # create and simulate network(pops, cells, conns, rxd, stims, simData) = sim.create(netParams.netParams, cfg.simConfig, output=True)
-
 ###############################################################################
 # create, simulate, and analyse network
 ###############################################################################
+sim.createSimulateAnalyze(netParams = netParams.netParams, simConfig = cfg.simConfig)
 
+"""
 (pops, cells, conns, rxd, stims, simData) = sim.create(netParams.netParams, cfg.simConfig, output=True)
 
+sim.gatherData()    
 ###############################################################################
 # access cell somas
 ###############################################################################
-
+"""
+"""
 PYcells = sim.net.cells[  0:100]
 INcells = sim.net.cells[100:300]
 TCcells = sim.net.cells[300:400]
@@ -168,7 +170,7 @@ for nc in ncl:
 
 
 
-
+"""
 
 
 """

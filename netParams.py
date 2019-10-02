@@ -41,6 +41,19 @@ def mkConnList( n, diam ):
             connList.append( [i, jbound] )
     return connList
 
+def mkConnListIN( n, diam ):
+    connList = []
+    for i in range(n):
+        for j in range(i-diam, i+diam+1):
+            jbound = j                      # boundary cell conditions
+            if (jbound < 0):
+                jbound = abs(j) - 1
+            if (jbound > (n-1)):
+                jbound = 2 * n - jbound - 1
+            connList.append( [i, jbound] )
+            connList.append( [i + 100, jbound])
+    return connList
+
 def mkConnListCT( nPre, nPost, diam, divergence):   #corticothalamic
     connList = []
     for i in range(0, nPre, divergence):        #divergence should be integer
@@ -101,10 +114,6 @@ TCPY    = 1
 TCIN    = 1
 
 
-#print("INPY-GABAB_weight = ", netParams.synMechParams['GABAB_S1']['gmax'])
-PYgmax = 0.03/11 * 1
-#print("RETC-GABAB_weight = ", netParams.synMechParams['GABAB_S2']['gmax'])
-TCgmax = 0.04/11 * 1
 ###############################################################################
 # NETWORK PARAMETERS
 ###############################################################################
@@ -113,6 +122,17 @@ ncorticalcells = 100
 nthalamiccells = 100
 narrowdiam = 5
 widediam = 10
+
+
+nRERE = 2 * narrowdiam + 1
+nRETC = 2 * narrowdiam + 1
+nTCRE = 2 * narrowdiam + 1
+nPYPY = 2 * narrowdiam + 1
+nINPY = 2 * narrowdiam + 1
+nPYIN = 2 * narrowdiam + 1
+nPYRE = 2 * widediam + 1
+nPYTC = 2 * widediam + 1
+nTCPY = 2 * widediam + 1
 
 netParams.xspacing = 20 # um
 netParams.yspacing = 100 # um
@@ -152,22 +172,11 @@ tausmax = 140400
 ### PY (single compartment)
 PYcellRule = netParams.importCellParams(label='PYrule', conds={'cellType': 'PY', 'cellModel': 'HH_PY'},	fileName='sPY.tem', cellName='sPY')
 
-##PYcellRule['secs']['soma']['vinit']=v_init
-##netParams.cellParams['PYrule'] = PYcellRule
-
 ### TC (Destexhe et al., 1996; Bazhenov et al.,2002)
 TCcellRule = netParams.importCellParams(label='TCrule', conds={'cellType': 'TC', 'cellModel': 'HH_TC'}, fileName='TC.tem', cellName='sTC')
 
-##TCcellRule['secs']['soma']['vinit']=v_init
-##TCcellRule['secs']['soma']['mechs']['iar']['ghbar']=17.5e-6
-##TCcellRule['secs']['soma']['pointps']['kleak_0']['gmax']=40e-4
-##netParams.cellParams['TCrule'] = TCcellRule
-
 ### RE (Destexhe et al., 1996; Bazhenov et al.,2002)
 REcellRule = netParams.importCellParams(label='RErule', conds={'cellType': 'RE', 'cellModel': 'HH_RE'}, fileName='RE.tem', cellName='sRE')
-
-##REcellRule['secs']['soma']['vinit']=v_init
-##netParams.cellParams['RErule'] = REcellRule
 
 ### IN (single compartment)
 INcellRule = netParams.importCellParams(label='INrule', conds={'cellType': 'IN', 'cellModel': 'HH_IN'},	fileName='sIN.tem', cellName='sIN')
@@ -413,19 +422,20 @@ netParams.cellParams['INrule'] = INcellRule
 # Synaptic mechanism parameters
 ###############################################################################
 
+PYgmax = 0.03/nINPY # gmax instead of weight for GABAB due to nonlinearity
+TCgmax = 0.04/nRETC # gmax instead of weight for GABAB due to nonlinearity
+
 # AMPA_S
-#netParams.synMechParams['AMPA_S'] = {'mod': 'AMPA_S', 'Cmax': 0.5, 'Cdur': 0.3, 'Alpha': 0.94, 'Beta': 0.18, 'Erev': 0} #}
 netParams.synMechParams['AMPA_S'] = {'mod': 'AMPA_S', 'Alpha': 0.94, 'Beta': 0.18, 'Cmax': 0.5, 'Cdur': 0.3, 'Erev': 0}
 netParams.synMechParams['AMPA_S_PYPY'] = {'mod': 'AMPA_S', 'Alpha': 0.94, 'Beta': 0.18, 'Cmax': 0.5, 'Cdur': 0.3, 'Erev': 0}
 
 # GABAa_S
-#netParams.synMechParams['GABAA_S'] = {'mod': 'GABAa_S', 'Cmax': 0.5, 'Cdur': 0.3, 'Alpha': 20, 'Beta': 0.162, 'Erev': -85} # }  # GABAA
 netParams.synMechParams['GABAA_S'] = {'mod': 'GABAa_S', 'Alpha': 20, 'Beta': 0.162, 'Cmax': 0.5, 'Cdur': 0.3, 'Erev': -85}
 
 # GABAb_S
-#netParams.synMechParams['GABAB_S1'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': PYgmax }#INPYb*0.03/(N_PY*IN_PY_GABAB_Prob+1)} #0.5}#0.002727}# }  # GABAB
-#netParams.synMechParams['GABAB_S2'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': TCgmax }#RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1)} #0.5}#0.003636}# }  # GABAB
-#netParams.synMechParams['GABAB_S'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.52, 'K2': 0.0045, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'Erev': -95} # }  # GABAB
+netParams.synMechParams['GABAB_S1'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': PYgmax }
+netParams.synMechParams['GABAB_S2'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.3, 'K1': 0.09, 'K2': 0.0012, 'K3': 0.18, 'K4': 0.034, 'KD': 100, 'n': 4, 'Erev': -95, 'gmax': TCgmax }
+
 
 ###############################################################################
 # Stimulation parameters
@@ -448,18 +458,7 @@ cLthalamic = mkConnList( nthalamiccells, narrowdiam)
 cLcortthal = mkConnListCT( ncorticalcells, nthalamiccells, widediam, divergence) #cortical -> thalamic projections
 cLthalcort = mkConnListTC( nthalamiccells, ncorticalcells, widediam, divergence) #thalamic -> cortical projections
 
-#// params:      RERE, RETCa                ,RETCb *0,TCRE, PYPY, PYIN, INPYa              , INPYb                *0, PYRE, PYTC, TCPY, TCIN  
-#assign_synapses(0.2 , gabaapercent/100*0.02,0.04  *0,0.2 , 0.6 , 0.2 ,gabaapercent/100*0.3,gababpercent/100*0.03 *0, 1.2 , 0.01, 1.2 , 0) 
 
-nRERE = 2 * narrowdiam + 1
-nRETC = 2 * narrowdiam + 1
-nTCRE = 2 * narrowdiam + 1
-nPYPY = 2 * narrowdiam + 1
-nINPY = 2 * narrowdiam + 1
-nPYIN = 2 * narrowdiam + 1
-nPYRE = 2 * widediam + 1
-nPYTC = 2 * widediam + 1
-nTCPY = 2 * widediam + 1
 
 ###########################################################
 ##   Glutamate AMPA receptors in synapses from TC to RE  ##
@@ -477,8 +476,8 @@ netParams.connParams['TC->RE'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': TC_RE_AMPA_Prob}
-    #'connList': cLthalamic}
-    'connList': netcons['AMPA_S']['sTCsRE']}
+    'connList': cLthalamic}
+    #'connList': netcons['AMPA_S']['sTCsRE']}
 
 ###########################################################
 ##   GABAa receptors in intra-RE synapses                ##
@@ -497,8 +496,8 @@ netParams.connParams['RE->RE'] = {
     #'synsPerConn': 1,
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': RE_RE_GABAA_Prob}
-    #'connList': cLthalamic}
-    'connList': netcons['GABAa_S']['sREsRE']} 
+    'connList': cLthalamic}
+    #'connList': netcons['GABAa_S']['sREsRE']} 
 
 ###########################################################
 ##   GABAa receptors in in synapses from RE to TC cells  ##
@@ -515,30 +514,30 @@ netParams.connParams['RE->TC_GABAA'] = {
     'synMech': 'GABAA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': RE_TC_GABAA_Prob}
-    #'connList': cLthalamic}
-    'connList': netcons['GABAa_S']['sREsTC']} 
+    'connList': cLthalamic}
+    #'connList': netcons['GABAa_S']['sREsTC']} 
 
 ###########################################################
 ##   GABAb receptors in in synapses from RE to TC cells  ##
 ###########################################################
 
-"""
-netParams.connParams['RE->TC_GABAB'] = {
-    'preConds': {'popLabel': 'RE'}, 
-    'postConds': {'popLabel': 'TC'},
-    #'weight': RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1),         # (Destexhe, 1998)
-    #'weight': 0.04,         # (Destexhe, 1998)
-    'weight': 1,
-    'sec': 'soma',
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    'synMech': 'GABAB_S2',
-    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-    #'probability': RE_TC_GABAB_Prob}
-    'connList': netcons['GABAb_S']['sREsTC']}
-    #'connList': smallWorldConn(N_RE,N_TC,pThl,RE_TC_GABAB_Prob)}
-"""
-#netParams.connParams['RE->TC_GABAB']['gmax']=0.04/(N_TC*RE_TC_GABAB_Prob+1)
+
+##commented netParams.connParams['RE->TC_GABAB'] = {
+##commented     'nonLinear': True,
+##commented     'preConds': {'popLabel': 'RE'}, 
+##commented     'postConds': {'popLabel': 'TC'},
+##commented     #'weight': RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1),         # (Destexhe, 1998)
+##commented     #'weight': 0.04,         # (Destexhe, 1998)
+##commented     'weight': 1,
+##commented     'sec': 'soma',
+##commented     'delay': netParams.axondelay, 
+##commented     'loc': 0.5,
+##commented     'synMech': 'GABAB_S2',
+##commented     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
+##commented     #'probability': RE_TC_GABAB_Prob}
+##commented     'connList': cLthalamic}
+##commented     #'connList': netcons['GABAb_S']['sREsTC']}
+
 
 ###########################################################
 ##   Glutamate AMPA receptors in synapses from PY to PY  ##
@@ -553,8 +552,8 @@ netParams.connParams['PY->PY_AMPA'] = {
     'delay': netParams.axondelay, 
     'loc': 0.5,
     'synMech': 'AMPA_S_PYPY',
-    #'connList': cLcortical}
-    'connList': netcons['AMPA_S']['sPYsPY']}
+    'connList': cLcortical}
+    #'connList': netcons['AMPA_S']['sPYsPY']}
 
 ###########################################################
 ##   Glutamate AMPA receptors in synapses from PY to IN  ##
@@ -572,14 +571,14 @@ netParams.connParams['PY->IN_AMPA'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': PY_IN_AMPA_Prob}
-    #'connList': PYINconnlist}
-    'connList': netcons['AMPA_S']['sPYsIN']}
+    'connList': PYINconnlist}
+    #'connList': netcons['AMPA_S']['sPYsIN']}
 
 ###########################################################
 ##   GABAa receptors in synapses from IN to PY cells     ##
 ###########################################################
-
-INPYconnlist = cLcortical + [ [x + 100, y] for x, y in cLcortical ]
+INPYconnlist = mkConnListIN( ncorticalcells, narrowdiam ) #IN connections
+#INPYconnlist = cLcortical + [ [x + 100, y] for x, y in cLcortical ]
 netParams.connParams['IN->PY_GABAA'] = {
     'preConds': {'popLabel': 'IN'}, 
     'postConds': {'popLabel': 'PY'},
@@ -591,28 +590,29 @@ netParams.connParams['IN->PY_GABAA'] = {
     'synMech': 'GABAA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': IN_PY_GABAA_Prob}
-    #'connList': INPYconnlist}
-    'connList': netcons['GABAa_S']['sINsPY']}
+    'connList': INPYconnlist}
+    #'connList': netcons['GABAa_S']['sINsPY']}
 
 ###########################################################
 ##   GABAb receptors in in synapses from IN to PY cells  ##
 ###########################################################
-"""
-netParams.connParams['IN->PY_GABAB'] = {
-    'preConds': {'popLabel': 'IN'}, 
-    'postConds': {'popLabel': 'PY'},
-    #'weight': INPYb*gababpercent*0.03/(N_PY*IN_PY_GABAB_Prob+1),         # (Destexhe, 1998)
-    #'weight': 0.03,         # (Destexhe, 1998)
-    'weight': 1,
-    'sec': 'soma',
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    'synMech': 'GABAB_S1',
-    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-    #'probability': IN_PY_GABAB_Prob}
-    'connList': netcons['GABAb_S']['sINsPY']}
-    #'connList': smallWorldConn(N_IN,N_PY,pCrx,IN_PY_GABAB_Prob)}
-"""
+
+##commented netParams.connParams['IN->PY_GABAB'] = {
+##commented     'nonLinear': True,
+##commented     'preConds': {'popLabel': 'IN'}, 
+##commented     'postConds': {'popLabel': 'PY'},
+##commented     #'weight': INPYb*gababpercent*0.03/(N_PY*IN_PY_GABAB_Prob+1),         # (Destexhe, 1998)
+##commented     #'weight': 0.03,         # (Destexhe, 1998)
+##commented     'weight': 1,
+##commented     'sec': 'soma',
+##commented     'delay': netParams.axondelay, 
+##commented     'loc': 0.5,
+##commented     'synMech': 'GABAB_S1',
+##commented     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
+##commented     #'probability': IN_PY_GABAB_Prob}
+##commented     'connList': INPYconnlist}
+##commented     #'connList': netcons['GABAa_S']['sINsPY']}
+
 
 ###########################################################
 ##   GABAa receptors in synapses from IN to IN cells     ##
@@ -630,8 +630,8 @@ netParams.connParams['IN->IN_GABAA'] = {
     'synMech': 'GABAA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': IN_PY_GABAA_Prob}
-    #'connList': ININconnlist}
-    'connList': netcons['GABAa_S']['sINsIN']}
+    'connList': ININconnlist}
+    #'connList': netcons['GABAa_S']['sINsIN']}
 
 ###########################################################
 ##   Glutamate AMPA receptors in synapses from PY to RE  ##
@@ -647,8 +647,8 @@ netParams.connParams['PY->RE'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': PY_RE_AMPA_Prob}
-    #'connList': cLcortthal}
-    'connList': netcons['AMPA_S']['sPYsRE']} 
+    'connList': cLcortthal}
+    #'connList': netcons['AMPA_S']['sPYsRE']} 
 
 ###########################################################
 ##   Glutamate AMPA receptors in synapses from PY to TC  ##
@@ -664,8 +664,8 @@ netParams.connParams['PY->TC'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': PY_TC_AMPA_Prob}
-    #'connList': cLcortthal}
-    'connList': netcons['AMPA_S']['sPYsTC']}   
+    'connList': cLcortthal}
+    #'connList': netcons['AMPA_S']['sPYsTC']}   
 
 ###########################################################
 ##   Glutamate AMPA receptors in synapses from TC to PY  ##
@@ -681,8 +681,8 @@ netParams.connParams['TC->PY'] = {
     'synMech': 'AMPA_S',
     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
     #'probability': TC_PY_AMPA_Prob}
-    #'connList': cLthalcort}
-    'connList': netcons['AMPA_S']['sTCsPY']}
+    'connList': cLthalcort}
+    #'connList': netcons['AMPA_S']['sTCsPY']}
 
 ###########################################################
 ##   Glutamate AMPA receptors in synapses from TC to IN  ##
