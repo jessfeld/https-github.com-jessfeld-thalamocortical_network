@@ -522,21 +522,21 @@ netParams.connParams['RE->TC_GABAA'] = {
 ###########################################################
 
 
-##commented netParams.connParams['RE->TC_GABAB'] = {
-##commented     'nonLinear': True,
-##commented     'preConds': {'popLabel': 'RE'}, 
-##commented     'postConds': {'popLabel': 'TC'},
-##commented     #'weight': RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1),         # (Destexhe, 1998)
-##commented     #'weight': 0.04,         # (Destexhe, 1998)
-##commented     'weight': 1,
-##commented     'sec': 'soma',
-##commented     'delay': netParams.axondelay, 
-##commented     'loc': 0.5,
-##commented     'synMech': 'GABAB_S2',
-##commented     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-##commented     #'probability': RE_TC_GABAB_Prob}
-##commented     'connList': cLthalamic}
-##commented     #'connList': netcons['GABAb_S']['sREsTC']}
+netParams.connParams['RE->TC_GABAB'] = {
+    'nonLinear': True,
+    'preConds': {'popLabel': 'RE'}, 
+    'postConds': {'popLabel': 'TC'},
+    #'weight': RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1),         # (Destexhe, 1998)
+    #'weight': 0.04,         # (Destexhe, 1998)
+    'weight': 1,
+    'sec': 'soma',
+    'delay': netParams.axondelay, 
+    'loc': 0.5,
+    'synMech': 'GABAB_S2',
+    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
+    #'probability': RE_TC_GABAB_Prob}
+    'connList': cLthalamic}
+    #'connList': netcons['GABAb_S']['sREsTC']}
 
 
 ###########################################################
@@ -597,21 +597,21 @@ netParams.connParams['IN->PY_GABAA'] = {
 ##   GABAb receptors in in synapses from IN to PY cells  ##
 ###########################################################
 
-##commented netParams.connParams['IN->PY_GABAB'] = {
-##commented     'nonLinear': True,
-##commented     'preConds': {'popLabel': 'IN'}, 
-##commented     'postConds': {'popLabel': 'PY'},
-##commented     #'weight': INPYb*gababpercent*0.03/(N_PY*IN_PY_GABAB_Prob+1),         # (Destexhe, 1998)
-##commented     #'weight': 0.03,         # (Destexhe, 1998)
-##commented     'weight': 1,
-##commented     'sec': 'soma',
-##commented     'delay': netParams.axondelay, 
-##commented     'loc': 0.5,
-##commented     'synMech': 'GABAB_S1',
-##commented     #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
-##commented     #'probability': IN_PY_GABAB_Prob}
-##commented     'connList': INPYconnlist}
-##commented     #'connList': netcons['GABAa_S']['sINsPY']}
+netParams.connParams['IN->PY_GABAB'] = {
+    'nonLinear': True,
+    'preConds': {'popLabel': 'IN'}, 
+    'postConds': {'popLabel': 'PY'},
+    #'weight': INPYb*gababpercent*0.03/(N_PY*IN_PY_GABAB_Prob+1),         # (Destexhe, 1998)
+    #'weight': 0.03,         # (Destexhe, 1998)
+    'weight': 1,
+    'sec': 'soma',
+    'delay': netParams.axondelay, 
+    'loc': 0.5,
+    'synMech': 'GABAB_S1',
+    #'probability': '1.0 if dist_x <= narrowdiam*xspacing else 0.0'}   
+    #'probability': IN_PY_GABAB_Prob}
+    'connList': INPYconnlist}
+    #'connList': netcons['GABAa_S']['sINsPY']}
 
 
 ###########################################################

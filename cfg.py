@@ -9,23 +9,13 @@ str_nav_type = ['WT', 'T875M', 'W1204R', 'R1648H', 'R859C', 'knock out']
 str_drug = ['no drug', 'carbamazepine', 'oxcarbazepine', 'lamictal', 'eslicarb', 'VPA', 'diazepam'] 
 simConfig = specs.SimConfig()   # object of class SimConfig to store the simulation configuration
 
-celsius = 36
-v_init = -70
 # Simulation parameters
-simConfig.allowSelfConns = True
+simConfig.allowSelfConns = True # doesn't actually do anything
 simConfig.checkErrors=False # True # 
-simConfig.trans = 0000
-simConfig.Dt = 0.1
-simConfig.steps_per_ms = 1/simConfig.Dt
-simConfig.npoints = 6000 # 12500
-
-graphstart = 0 #simConfig.npoints / 10 - 30
-graphstop  = simConfig.npoints / 10 #simConfig.duration
-
-simConfig.duration = simConfig.npoints * simConfig.Dt # simConfig.trans + simConfig.npoints * simConfig.Dt # Duration of the simulation, in ms
-simConfig.dt = simConfig.Dt # Internal integration timestep to use
-simConfig.hParams['celsius'] = celsius
-simConfig.hParams['v_init'] = v_init
+simConfig.duration = 600 # Duration of the simulation, in ms
+simConfig.dt = 0.1
+simConfig.hParams['celsius'] = 36
+simConfig.hParams['v_init'] = -70
 simConfig.seeds = {'conn': 1, 'stim': 1, 'loc': 1} # Seeds for randomizers (connectivity, input stimulation and cell locations)
 simConfig.verbose = False # True  # show detailed messages 
 
@@ -52,7 +42,6 @@ simConfig.recordStep = 0.1 # Step size in ms to save data (eg. V traces, LFP, et
 # Saving
 simConfig.simLabel = "sim"
 simConfig.saveFolder = "data"
-#simConfig.filename = 'sim'  # Set file output name
 simConfig.saveFileStep = 1000 # step size in ms to save data to disk
 simConfig.savePickle = True # Whether or not to write spikes etc. to a .mat file
 #simConfig.saveJson = True
