@@ -577,8 +577,8 @@ netParams.connParams['PY->IN_AMPA'] = {
 ###########################################################
 ##   GABAa receptors in synapses from IN to PY cells     ##
 ###########################################################
-INPYconnlist = mkConnListIN( ncorticalcells, narrowdiam ) #IN connections
-#INPYconnlist = cLcortical + [ [x + 100, y] for x, y in cLcortical ]
+INPYconnlist = mkConnListIN( ncorticalcells, narrowdiam )             #IN connections with instantiation matching original model
+# INPYconnlist = cLcortical + [ [x + 100, y] for x, y in cLcortical ] #order of instantiation matters when it comes to nonlinear receptors
 netParams.connParams['IN->PY_GABAA'] = {
     'preConds': {'popLabel': 'IN'}, 
     'postConds': {'popLabel': 'PY'},

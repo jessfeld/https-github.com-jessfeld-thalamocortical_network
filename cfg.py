@@ -10,7 +10,7 @@ str_drug = ['no drug', 'carbamazepine', 'oxcarbazepine', 'lamictal', 'eslicarb',
 simConfig = specs.SimConfig()   # object of class SimConfig to store the simulation configuration
 
 # Simulation parameters
-simConfig.allowSelfConns = True # doesn't actually do anything
+simConfig.allowSelfConns = False # True doesn't actually do anything
 simConfig.checkErrors=False # True # 
 simConfig.duration = 600 # Duration of the simulation, in ms
 simConfig.dt = 0.1
@@ -64,6 +64,4 @@ simConfig.stimtime = 10050
 simConfig.randomstim = 0
 
 simConfig.field = 0
-
-simConfig.runStopAt = simConfig.duration
 
