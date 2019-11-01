@@ -59,9 +59,4 @@ simConfig.savePickle = True # Whether or not to write spikes etc. to a .mat file
 #simConfig.analysis.plotConn(include=['allCells'], feature='strength', groupBy='pop', figSize=(9,9), showFig=True)
 #simConfig.analysis['plotConn'] = True           # plot connectivity matrix
 
-# netParams
-simConfig.stimtime = 10050
-simConfig.randomstim = 0
-
-simConfig.field = 0
 

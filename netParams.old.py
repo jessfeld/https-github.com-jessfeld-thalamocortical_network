@@ -27,8 +27,7 @@ import random as rnd
 import numpy as np
 
 import json
-from pprint import pprint
-from init import nav_type, drug, dose
+from settings import nav_type, drug, dose
 
 def mkConnList( n, diam ):
     connList = []
@@ -92,7 +91,7 @@ ININweight = 0.00
 gabaapercent = 0.1
 gababpercent = 1
 
-stimtime = 10050 #stimulation distributed over PY cells 
+
 ###############################################################################
 # NETWORK PARAMETERS
 ###############################################################################
@@ -177,7 +176,6 @@ if (nav_type == 2):
 if (nav_type == 3):
     INcellRule['secs']['soma']['mechs']['inak2005mut']['mvhalf']=21.2
     INcellRule['secs']['soma']['mechs']['inak2005mut']['mk']=4.9
-    INcellRule['secs']['soma']['mechs']['inak2005mut']['hvhalf']=39.7
     INcellRule['secs']['soma']['mechs']['inak2005mut']['hk']=7.7
     INcellRule['secs']['soma']['mechs']['inak2005mut']['svhalf']=46.1 
     INcellRule['secs']['soma']['mechs']['inak2005mut']['sk']=5.4 
@@ -213,66 +211,175 @@ if (drug == 0):
     cellRule['htaubase'] = tauhmax
     cellRule['staubase'] = tausmax
 
+    PYcellRule['secs']['soma']['mechs']['inak2005'].update(cellRule)#['gnablock'] = 1
+    PYcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = 0
+    PYcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = 0
+    PYcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax
+    PYcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax
+
+    TCcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1
+    TCcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = 0
+    TCcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = 0
+    TCcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax
+    TCcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax
+
+    REcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1
+    REcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = 0
+    REcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = 0
+    REcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax
+    REcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax
+
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['gnablock'] = 1
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['hshift'] = 0
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['sshift'] = 0
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['htaubase'] = tauhmax
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['staubase'] = tausmax
+
 if (drug == 1):
     # carbamazepine
     print("carbamazepine dose: ", dose)
+    PYcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.763) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = -7 * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -4.63 * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (31.526 -1) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax - tausmax * (1 - 0.5538) * dose
 
-    cellRule['gnablock'] = 1 - (1 - 0.763) * dose
-    cellRule['hshift'] = -7 * dose
-    cellRule['sshift'] = -4.63 * dose
-    cellRule['htaubase'] = tauhmax + tauhmax * (31.526 -1) * dose
-    cellRule['staubase'] = tausmax - tausmax * (1 - 0.5538) * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.763) * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = -7 * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -4.63 * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (31.526 -1) * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax - tausmax * (1 - 0.5538) * dose
 
+    REcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.763) * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = -7 * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -4.63 * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (31.526 -1) * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax - tausmax * (1 - 0.5538) * dose
+
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['gnablock'] = 1 - (1 - 0.763) * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['hshift'] = -7 * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['sshift'] = -4.63 * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['htaubase'] = tauhmax + tauhmax * (31.526 -1) * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['staubase'] = tausmax - tausmax * (1 - 0.5538) * dose
 
 if (drug == 2):
     # oxcarbazepine
     print("oxcarbazepine dose: ", dose)
-    cellRule['gnablock'] = 1 - (1 - 0.756) * dose
-    cellRule['hshift'] = -16.58 * dose
-    cellRule['sshift'] = -28.06 * dose
-    cellRule['htaubase'] = tauhmax + tauhmax * (8.079 -1) * dose
-    cellRule['staubase'] = tausmax - tausmax * (1 - 0.3777) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.756) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = -16.58 * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -28.06 * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (8.079 -1) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax - tausmax * (1 - 0.3777) * dose
+
+    TCcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.756) * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = -16.58 * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -28.06 * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (8.079 -1) * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax - tausmax * (1 - 0.3777) * dose
+
+    REcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.756) * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = -16.58 * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -28.06 * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (8.079 -1) * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax - tausmax * (1 - 0.3777) * dose
+
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['gnablock'] = 1 - (1 - 0.756) * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['hshift'] = -16.58 * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['sshift'] = -28.06 * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['htaubase'] = tauhmax + tauhmax * (8.079 - 1) * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['staubase'] = tausmax - tausmax * (1 - 0.3777) * dose
 
 if (drug == 3):
     # lamictal
     print("lamictal dose: ", dose)
-    cellRule['gnablock'] = 1 - (1 - 0.799) * dose
-    cellRule['hshift'] = -4.76 * dose
-    cellRule['sshift'] = -53.28 * dose
-    cellRule['htaubase'] = tauhmax + tauhmax * (1.182 - 1) * dose
-    cellRule['staubase'] = tausmax + tausmax * (1.231 - 1) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.799) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = -4.76 * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -53.28 * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (1.182 - 1) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax + tausmax * (1.231 - 1) * dose
+
+    TCcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.799) * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = -4.76 * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -53.28 * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (1.182 - 1) * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax + tausmax * (1.231 - 1) * dose
+
+    REcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.799) * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = -4.76 * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -53.28 * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (1.182 - 1) * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax + tausmax * (1.231 - 1) * dose
+
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['gnablock'] = 1 - (1 - 0.799) * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['hshift'] = -4.76 * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['sshift'] = -53.28 * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['htaubase'] = tauhmax + tauhmax * (1.182 - 1) * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['staubase'] = tausmax + tausmax * (1.231 - 1) * dose
+
 
 if (drug == 4):
     # eslicarbazepine
     print("esli dose: ", dose)
-    cellRule['gnablock'] = 1 - (1 - 0.944) * dose
-    cellRule['hshift'] = 3.54 * dose
-    cellRule['sshift'] = -31.16 * dose
-    cellRule['htaubase'] = tauhmax + tauhmax * (1.778 - 1) * dose
-    cellRule['staubase'] = tausmax - tausmax * (1 - 0.986) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.944) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = 3.54 * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -31.16 * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (1.778 - 1) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax - tausmax * (1 - 0.986) * dose
+
+    TCcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.944) * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = 3.54 * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -31.16 * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (1.778 - 1) * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax - tausmax * (1 - 0.986) * dose
+
+    REcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.944) * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = 3.54 * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -31.16 * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (1.778 - 1) * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax - tausmax * (1 - 0.986) * dose
+    
+    print("tauhmax=", tauhmax, "htaubase_inak2005=", PYcellRule['secs']['soma']['mechs']['inak2005']['htaubase'])
+
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['gnablock'] = 1 - (1 - 0.944) * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['hshift'] = 3.54 * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['sshift'] = -31.16 * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['htaubase'] = tauhmax + tauhmax * (1.778 - 1) * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['staubase'] = tausmax - tausmax * (1 - 0.986) * dose
 
 if (drug == 5):
     # valproic acid
     print("VPS dose: ", dose)
     # gabaapercent=200
-    cellRule['gnablock'] = 1 - (1 - 0.8) * dose
-    cellRule['hshift'] = 10.0 * dose
-    cellRule['sshift'] = -31.16 * dose
-    cellRule['htaubase'] = tauhmax + tauhmax * (2.0 - 1) * dose
-    cellRule['staubase'] = tausmax - tausmax * (1 - 0.986) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.8) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = 10.0 * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -31.16 * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (2.0 - 1) * dose
+    PYcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax - tausmax * (1 - 0.986) * dose
+
+    TCcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.8) * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = 10.0 * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -31.16 * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (2.0 - 1) * dose
+    TCcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax - tausmax * (1 - 0.986) * dose
+
+    REcellRule['secs']['soma']['mechs']['inak2005']['gnablock'] = 1 - (1 - 0.8) * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['hshift'] = 10.0 * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['sshift'] = -31.16 * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['htaubase'] = tauhmax + tauhmax * (2.0 - 1) * dose
+    REcellRule['secs']['soma']['mechs']['inak2005']['staubase'] = tausmax - tausmax * (1 - 0.986) * dose
+    print("tauhmax=", tauhmax, "htaubase_inak2005=", PYcellRule['secs']['soma']['mechs']['inak2005']['htaubase'])
+
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['gnablock'] = 1 - (1 - 0.8) * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['hshift'] = 10 * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['sshift'] = -31.16 * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['htaubase'] = tauhmax + tauhmax * (2.0 - 1) * dose
+    INcellRule['secs']['soma']['mechs']['inak2005mut']['staubase'] = tausmax - tausmax * (1 - 0.986) * dose
 
 if (drug == 6):
     # diazepam
     print("diazepam dose: ", dose)
     gabaapercent = 200
 
-PYcellRule['secs']['soma']['mechs']['inak2005'].update(cellRule)
-TCcellRule['secs']['soma']['mechs']['inak2005'].update(cellRule)
-REcellRule['secs']['soma']['mechs']['inak2005'].update(cellRule)
-INcellRule['secs']['soma']['mechs']['inak2005'].update(cellRule)
-INcellRule['secs']['soma']['mechs']['inak2005mut'].update(cellRule)
-
-print("tauhmax=", tauhmax, "htaubase_inak2005=", PYcellRule['secs']['soma']['mechs']['inak2005']['htaubase'])
 
 PYcellRule['secs']['soma']['vinit']=v_init
 netParams.cellParams['PYrule'] = PYcellRule
@@ -287,6 +394,9 @@ netParams.cellParams['RErule'] = REcellRule
 
 INcellRule['secs']['soma']['vinit']=v_init
 netParams.cellParams['INrule'] = INcellRule
+
+
+
 
 ###############################################################################
 # Synaptic mechanism parameters
