@@ -89,7 +89,7 @@ def mkConnListTC( nPre, nPost, diam, divergence):   #thalamocortical
 
 ININweight = 0.00
 
-gabaapercent = 0.1
+gabaapercent = 1
 gababpercent = 1
 
 stimtime = 10050 #stimulation distributed over PY cells 
@@ -278,8 +278,8 @@ PYcellRule['secs']['soma']['vinit']=v_init
 netParams.cellParams['PYrule'] = PYcellRule
 
 TCcellRule['secs']['soma']['vinit']=v_init
-TCcellRule['secs']['soma']['mechs']['iar']['ghbar']=17.5e-6
-TCcellRule['secs']['soma']['pointps']['kleak_0']['gmax']=40e-4
+TCcellRule['secs']['soma']['mechs']['iar']['ghbar']      = 17.5e-6
+TCcellRule['secs']['soma']['pointps']['kleak_0']['gmax'] = 40e-4
 netParams.cellParams['TCrule'] = TCcellRule
 
 REcellRule['secs']['soma']['vinit']=v_init
@@ -391,7 +391,7 @@ netParams.connParams['RE->TC_GABAA'] = {
 
 
 netParams.connParams['RE->TC_GABAB'] = {
-    'nonLinear': True,
+    'oneSynPerNetcon': True,
     'preConds': {'popLabel': 'RE'}, 
     'postConds': {'popLabel': 'TC'},
     #'weight': RETCb*0.04/(N_TC*RE_TC_GABAB_Prob+1),         # (Destexhe, 1998)
@@ -466,7 +466,7 @@ netParams.connParams['IN->PY_GABAA'] = {
 ###########################################################
 
 netParams.connParams['IN->PY_GABAB'] = {
-    'nonLinear': True,
+    'oneSynPerNetcon': True,
     'preConds': {'popLabel': 'IN'}, 
     'postConds': {'popLabel': 'PY'},
     #'weight': INPYb*gababpercent*0.03/(N_PY*IN_PY_GABAB_Prob+1),         # (Destexhe, 1998)

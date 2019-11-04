@@ -3,7 +3,7 @@
 #------------------------------------------------------------------------------
 
 from netpyne import specs
-from settings import nav_type, drug, dose
+from init import nav_type, drug, dose, duration
 
 str_nav_type = ['WT', 'T875M', 'W1204R', 'R1648H', 'R859C', 'knock out']
 str_drug = ['no drug', 'carbamazepine', 'oxcarbazepine', 'lamictal', 'eslicarb', 'VPA', 'diazepam'] 
@@ -12,7 +12,7 @@ simConfig = specs.SimConfig()   # object of class SimConfig to store the simulat
 # Simulation parameters
 simConfig.allowSelfConns = False # True doesn't actually do anything
 simConfig.checkErrors=False # True # 
-simConfig.duration = 600 # Duration of the simulation, in ms
+simConfig.duration = duration # Duration of the simulation, in ms
 simConfig.dt = 0.1
 simConfig.hParams['celsius'] = 36
 simConfig.hParams['v_init'] = -70
@@ -48,7 +48,8 @@ simConfig.savePickle = True # Whether or not to write spikes etc. to a .mat file
 #simConfig.saveMat = True
 #simConfig.saveDpk = False
 
-# Analysis and plotting 
+# Analysis and plotting
+simConfig.analysis['plotRaster'] = {'include': ['RE', 'TC', 'IN', 'PY'], 'timeRange': [0, duration], 'orderInverse': False, 'showFig' : False, 'saveFig':'./images/raster.png'} 
 #simConfig.analysis['plotRaster'] = {'include': ['RE', 'TC', 'IN', 'PY'], 'timeRange': [graphstart, graphstop], 'orderInverse': False, 'showFig' : False, 'saveFig':'./images/raster%d%d%d_%s_%s_dose%d.png'%(nav_type,drug, dose*100, str_nav_type[nav_type], str_drug[drug], dose*100)} #True # Whether or not to plot a raster
 #simConfig.analysis['plotTraces'] = {'include': ['RE', 'TC', 'IN', 'PY'], 'timeRange': [graphstart, graphstop], 'oneFigPer': 'trace', 'overlay': True, 'showFig' : False, 'saveFig':'./images/plotTraces%d%d%d_%s_%s_dose%d.png'%(nav_type, drug, dose*100, str_nav_type[nav_type], str_drug[drug], dose*100)} # plot recorded traces for this list of cells
 
