@@ -68,7 +68,7 @@ INITIAL {
     nf = nfinf
 }
 
-DERIVATIVE states() {
+DERIVATIVE states {
     rates(v)           
     m' = (minf - m) / mtau
     h' = (hinf - h) / htau
