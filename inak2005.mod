@@ -31,11 +31,11 @@ PARAMETER {
     sk = 6.6
     hshift = 0 (mV)
     sshift = 0 (mV)
-    mtaubase = 0.15 (ms)
-    htaubase = 23.12 (ms)
+    mtaubase = 0.15
+    htaubase = 23.12
     htauvhalf = 77.58 (mV)
     htauk = 43.92
-    staubase = 140400 (ms)
+    staubase = 140400
     stauvhalf = 71.3 (mV)
     stauk = 30.9
 }
@@ -47,7 +47,7 @@ ASSIGNED {
     inat (mA/cm2)
     ikf (mA/cm2)
     minf hinf sinf nfinf
-    mtau (ms) htau (ms) stau (ms) nftau (ms)
+    mtau htau stau nftau
 } 
 
 STATE { m h s nf }
@@ -68,7 +68,7 @@ INITIAL {
     nf = nfinf
 }
 
-PROCEDURE states() {
+DERIVATIVE states() {
     rates(v)           
     m' = (minf - m) / mtau
     h' = (hinf - h) / htau
@@ -80,7 +80,7 @@ LOCAL q10
 
 PROCEDURE rates(v (mV)) {   :Computes rate and other constants at current v. Call once from HOC to initialize inf at resting v.
     LOCAL  alpha, beta, sum, vhs, vss
-    : TABLE minf, hinf, sinf,  nfinf, mtau, htau, stau, nftau DEPEND celsius FROM -100 TO 100 WITH 200
+    TABLE minf, hinf, sinf,  nfinf, mtau, htau, stau, nftau DEPEND celsius FROM -100 TO 100 WITH 200
     q10 = 3^((celsius - 6.3)/10)
     vhs = v - hshift
     vss = v - sshift
