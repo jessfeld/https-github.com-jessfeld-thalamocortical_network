@@ -48,6 +48,7 @@ NEURON {
     RANGE gnatbar, gkfbar, gnablock
 :    RANGE gl, el
     RANGE minf, mtau, hshift, sshift, mvhalf, mk, hvhalf, hk, svhalf, sk, mtaubase, htauk, htauvhalf, htauk, stauvhalf, stauk, hinf, htau, sinf, stau, nfinf, nftau, inat, m, h, s, htaubase, staubase
+    RANGE emut, perc
 }
 
  
@@ -79,6 +80,8 @@ PARAMETER {
     staubase = 140400 (ms)
     stauvhalf = 71.3 (mV)
     stauk = 30.9
+    emut = 40 (mV)
+    perc = 0.0
 :    gl (mho/cm2)    
 :    el (mV)
 }
@@ -106,7 +109,7 @@ STATE {
 BREAKPOINT {
     SOLVE states
     gnat = gnatbar*gnablock*m*m*m*h*s  
-    inat = gnat*(v - enat)
+    inat = gnat*( ( 1 - perc) * (v - enat) + (perc) * (v - emut) )
     gkf = gkfbar*nf*nf*nf*nf
     ikf = gkf*(v-ekf)
 :    il = gl*(v-el)
