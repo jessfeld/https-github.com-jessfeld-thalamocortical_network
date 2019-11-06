@@ -92,7 +92,6 @@ ININweight = 0.00
 gabaapercent = 1
 gababpercent = 1
 
-stimtime = 10050 #stimulation distributed over PY cells 
 ###############################################################################
 # NETWORK PARAMETERS
 ###############################################################################
@@ -101,7 +100,6 @@ ncorticalcells = 100
 nthalamiccells = 100
 narrowdiam = 5
 widediam = 10
-
 
 nRERE = 2 * narrowdiam + 1
 nRETC = 2 * narrowdiam + 1
@@ -312,10 +310,9 @@ netParams.synMechParams['GABAB_S2'] = {'mod': 'GABAb_S', 'Cmax': 0.5, 'Cdur': 0.
 ###############################################################################
 
 # IClamp PY
-netParams.stimSourceParams['Input_1'] = {'type': 'IClamp', 'del': stimtime, 'dur': 100, 'amp': 0.7}
+netParams.stimSourceParams['Input_1'] = {'type': 'IClamp', 'del': 0, 'dur': 10, 'amp': -0.7}
 # smallPY=1
-netParams.stimTargetParams['Input_1->PY'] = {'source': 'Input_1', 'sec':'soma', 'loc': 0.5, 
-                                              'conds': {'pop':'PY', 'cellList': [i*int(ncorticalcells/5-1)+11 for i in range(int(ncorticalcells/20))]}}
+netParams.stimTargetParams['Input_1->TC'] = {'source': 'Input_1', 'sec':'soma', 'loc': 0.5, 'conds': {'pop':'TC'}}
 
 ###############################################################################
 # Connectivity parameters
