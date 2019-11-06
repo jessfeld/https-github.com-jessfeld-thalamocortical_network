@@ -53,7 +53,7 @@ ASSIGNED {
 STATE { m h s nf }
  
 BREAKPOINT {
-    SOLVE states
+    SOLVE states METHOD cnexp
     gnat = gnatbar*gnablock*m*m*m*h*s  
     inat = gnat*(v - enat)
     gkf = gkfbar*nf*nf*nf*nf
