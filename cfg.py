@@ -3,16 +3,15 @@
 #------------------------------------------------------------------------------
 
 from netpyne import specs
-from init import nav_type, drug, dose, duration
 
 str_nav_type = ['WT', 'T875M', 'W1204R', 'R1648H', 'R859C', 'knock out']
 str_drug = ['no drug', 'carbamazepine', 'oxcarbazepine', 'lamictal', 'eslicarb', 'VPA', 'diazepam'] 
 simConfig = specs.SimConfig()   # object of class SimConfig to store the simulation configuration
 
+simConfig.nav_type, simConfig.drug, simConfig.dose, simConfig.duration = 0, 0, 0.05, 300
 # Simulation parameters
 simConfig.allowSelfConns = False # True doesn't actually do anything
 simConfig.checkErrors=False # True # 
-simConfig.duration = duration # Duration of the simulation, in ms
 simConfig.dt = 0.1
 simConfig.hParams['celsius'] = 36
 simConfig.hParams['v_init'] = -70

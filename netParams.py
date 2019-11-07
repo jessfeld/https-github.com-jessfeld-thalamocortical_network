@@ -22,13 +22,11 @@ from netpyne import sim
 
 netParams = specs.NetParams()   # object of class NetParams to store the network parameters
 
-
 import random as rnd
 import numpy as np
-
 import json
 from pprint import pprint
-from init import nav_type, drug, dose
+nav_type, drug, dose = cfg.nav_type, cfg.drug, cfg.dose
 
 def mkConnList( n, diam ):
     connList = []
