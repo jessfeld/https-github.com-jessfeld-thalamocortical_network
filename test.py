@@ -5,7 +5,7 @@ import time
 from netpyne import sim  # import netpyne init module
 from neuron import h
 
-cfg.simConfig.duration = 300
+cfg.simConfig.duration = duration = 300
 sim.create(netParams = netParams.netParams, simConfig = cfg.simConfig)
 
 seed = int(time.time() * 1e7) & 0xffffffff
