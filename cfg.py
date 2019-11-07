@@ -2,7 +2,7 @@ from netpyne import specs
 
 str_nav_type = ['WT', 'T875M', 'W1204R', 'R1648H', 'R859C', 'knock out']
 str_drug = ['no drug', 'carbamazepine', 'oxcarbazepine', 'lamictal', 'eslicarb', 'VPA', 'diazepam'] 
-cfg = simConfig = specs.SimConfig()   # object of class SimConfig to store the simulation configuration
+cfg = specs.SimConfig()
 
 #------------------------------------------------------------------------------
 # NA CHANNEL PARAMETERS
@@ -39,18 +39,4 @@ cfg.saveFileStep = 1000 # step size in ms to save data to disk
 cfg.savePickle = True # Whether or not to write spikes etc. to a .mat file
 
 # Analysis and plotting
-simConfig.analysis['plotRaster'] = {'include': ['RE', 'TC', 'IN', 'PY'], 'timeRange': [0, simConfig.duration], 'orderInverse': False, 'showFig' : False, 'saveFig':'./images/raster.png'} 
-#simConfig.analysis['plotRaster'] = {'include': ['RE', 'TC', 'IN', 'PY'], 'timeRange': [graphstart, graphstop], 'orderInverse': False, 'showFig' : False, 'saveFig':'./images/raster%d%d%d_%s_%s_dose%d.png'%(nav_type,drug, dose*100, str_nav_type[nav_type], str_drug[drug], dose*100)} #True # Whether or not to plot a raster
-#simConfig.analysis['plotTraces'] = {'include': ['RE', 'TC', 'IN', 'PY'], 'timeRange': [graphstart, graphstop], 'oneFigPer': 'trace', 'overlay': True, 'showFig' : False, 'saveFig':'./images/plotTraces%d%d%d_%s_%s_dose%d.png'%(nav_type, drug, dose*100, str_nav_type[nav_type], str_drug[drug], dose*100)} # plot recorded traces for this list of cells
-
-#simConfig.analysis['plotRatePSD'] = {'include': ['PY', 'IN', 'TC', 'RE'], 'Fs': 50, 'smooth': 10} # plot recorded traces for this list of cells
-#simConfig.addAnalysis('plot2Dnet', {'include': ['PY', 'IN', 'TC', 'RE'],  'showConns': True, 'saveFig': './images/plot2Dnet.png', 'showFig': False})
-#simConfig.addAnalysis('plotShape', {'showSyns': True})
-#simConfig.addAnalysis('plotConn', {'include': ['allCells'], 'feature': 'strength'})
-#simConfig.analysis.plotConn(include=['allCells'], feature='strength', groupBy='pop', figSize=(9,9), showFig=True)
-#simConfig.analysis['plotConn'] = True           # plot connectivity matrix
-=======
 cfg.analysis['plotRaster'] = {'include': ['RE', 'TC', 'IN', 'PY'], 'orderInverse': False, 'showFig' : False, 'saveFig':'./images/raster.png'} 
-
-
-
