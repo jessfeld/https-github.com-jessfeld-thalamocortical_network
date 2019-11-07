@@ -38,7 +38,6 @@ UNITS {
 
 }
 
- 
 NEURON { 
     SUFFIX inak2005 
     USEION nat READ enat WRITE inat VALENCE 1
@@ -121,10 +120,6 @@ INITIAL {
     s = sinf
 
     nf = nfinf
-    
-    VERBATIM
-    return 0;
-    ENDVERBATIM
 }
 
 
@@ -136,10 +131,6 @@ PROCEDURE states() {        : Computes state variables m, h, s and n
     h = h + hexp*(hinf-h)
     s = s + sexp*(sinf-s)
     nf = nf + nfexp*(nfinf-nf)
-    
-    VERBATIM
-    return 0;
-    ENDVERBATIM
 }
  
 
