@@ -263,13 +263,13 @@ if (drug == 6):
     print("diazepam dose: ", dose)
     gabaapercent = 200
 
-PYcellRule['secs']['soma']['mechs']['inak2005b'].update(cellRule)
-TCcellRule['secs']['soma']['mechs']['inak2005b'].update(cellRule)
-REcellRule['secs']['soma']['mechs']['inak2005b'].update(cellRule)
-INcellRule['secs']['soma']['mechs']['inak2005b'].update(cellRule)
+PYcellRule['secs']['soma']['mechs']['inak2005a'].update(cellRule)
+TCcellRule['secs']['soma']['mechs']['inak2005a'].update(cellRule)
+REcellRule['secs']['soma']['mechs']['inak2005a'].update(cellRule)
+INcellRule['secs']['soma']['mechs']['inak2005a'].update(cellRule)
 INcellRule['secs']['soma']['mechs']['inak2005mut'].update(cellRule)
 
-print("tauhmax=", tauhmax, "htaubase_inak2005=", PYcellRule['secs']['soma']['mechs']['inak2005b']['htaubase'])
+print("tauhmax=", tauhmax, "htaubase_inak2005=", PYcellRule['secs']['soma']['mechs']['inak2005a']['htaubase'])
 
 PYcellRule['secs']['soma']['vinit']=v_init
 netParams.cellParams['PYrule'] = PYcellRule

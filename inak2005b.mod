@@ -79,13 +79,10 @@ UNITSOFF
 
  
 INITIAL {
-
     trates(v)
-    
     m = minf
     h = hinf
     s = sinf
-
     nf = nfinf
 }
 
