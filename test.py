@@ -2,6 +2,8 @@ import netParams # import parameters file
 import cfg
 import time
 
+nav_type, drug, dose, duration = 0, 0, 0.05, 300
+
 from netpyne import sim  # import netpyne init module
 from neuron import h
 
