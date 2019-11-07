@@ -1,5 +1,13 @@
 # myKnoxRepo
 
+test branch has 3 versions of inak2005
+inak2005 is the orig
+inak2005a is the one switched to NEURON inegration with cnexp
+inak2005b is similar to orig but was editing to see if any minor changes made any difference
+
+`nrnivmodl` # to compile
+nrniv -python test.py
+
 Port of Dravet thalamocortical seizure model.
 For proper results, run with the multiple synapse netpyne version at: 
 https://github.com/jchen6727/netpyne.git 
