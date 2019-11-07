@@ -19,6 +19,7 @@ Contributors: xxx@xxxx.com
 
 from netpyne import specs
 from netpyne import sim
+from cfg import cfg
 
 netParams = specs.NetParams()   # object of class NetParams to store the network parameters
 

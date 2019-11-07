@@ -1,12 +1,9 @@
-import netParams # import parameters file
-import cfg
 import time
-
 from netpyne import sim  # import netpyne init module
 from neuron import h
 
-cfg, netParams = sim.readCmdLineArgs()
-sim.create(simConfig = cfg, netParams = netParams)
+simConfig, netParams = sim.readCmdLineArgs('cfg.py', 'netParams.py')
+sim.create(simConfig = simConfig, netParams = netParams)
 
 seed = int(time.time() * 1e7) & 0xffffffff
 rndm = sim.h.Random()
