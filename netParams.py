@@ -132,8 +132,6 @@ netParams.popParams['RE'] = {'cellType': 'RE', 'numCells': nthalamiccells,      
 ###############################################################################
 # Cell parameters list
 ###############################################################################
-v_init = -70
-
 taummax = 0.15
 tauhmax = 23.12
 tausmax = 140400
@@ -305,21 +303,6 @@ INcellRule = {
                                 'pas': {'g': 0.00015, 'e': -70.0}},
                       'topol': {}}}}
 
-
-
-   
-### PY (single compartment)
-#PYcellRule = netParams.importCellParams(label='PYrule', conds={'cellType': 'PY', 'cellModel': '_PY'},	fileName='sPY.tem', cellName='sPY')
-
-### TC (Destexhe et al., 1996; Bazhenov et al.,2002)
-#TCcellRule = netParams.importCellParams(label='TCrule', conds={'cellType': 'TC', 'cellModel': '_TC'}, fileName='TC.tem', cellName='sTC')
-
-### RE (Destexhe et al., 1996; Bazhenov et al.,2002)
-#REcellRule = netParams.importCellParams(label='RErule', conds={'cellType': 'RE', 'cellModel': '_RE'}, fileName='RE.tem', cellName='sRE')
-
-### IN (single compartment)
-#INcellRule = netParams.importCellParams(label='INrule', conds={'cellType': 'IN', 'cellModel': '_IN'},	fileName='sIN.tem', cellName='sIN')
-
 ### Cell Rule to update all parameters
 cellRule = {}
 
@@ -448,16 +431,12 @@ REcellRule['secs']['soma']['mechs']['inak2005'].update(cellRule)
 INcellRule['secs']['soma']['mechs']['inak2005'].update(cellRule)
 INcellRule['secs']['soma']['mechs']['inak2005mut'].update(cellRule)
 
-PYcellRule['secs']['soma']['vinit']=v_init
 netParams.cellParams['PYrule'] = PYcellRule
 
-TCcellRule['secs']['soma']['vinit']=v_init
 netParams.cellParams['TCrule'] = TCcellRule
 
-REcellRule['secs']['soma']['vinit']=v_init
 netParams.cellParams['RErule'] = REcellRule
 
-INcellRule['secs']['soma']['vinit']=v_init
 netParams.cellParams['INrule'] = INcellRule
 
 ###############################################################################

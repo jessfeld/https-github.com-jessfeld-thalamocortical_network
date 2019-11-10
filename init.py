@@ -3,7 +3,6 @@
 # drug:     No drug is 0, carbamazepine 1, oxcarbazepine 2, lamictal 3, eslicarb. 4, VPA 5, diazepam 6
 # dose:     percentage of full dose divided by 100. Full dose is 250nM (for Na channel drugs), which probably super-physiological
 
-import netParams # import parameters file
 import time
 from netpyne import sim  # import netpyne init module
 
