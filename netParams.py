@@ -84,12 +84,10 @@ def mkConnListTC( nPre, nPost, radius, divergence):   #thalamocortical
 #
 ###############################################################################
 
-ININweight = 0.00
-
 gabaapercent = 1
 gababpercent = 1
 
-stimtime = 10050 #stimulation distributed over PY cells 
+#stimtime = 10050 #stimulation distributed over PY cells 
 ###############################################################################
 # NETWORK PARAMETERS
 ###############################################################################
@@ -178,7 +176,7 @@ REcellRule = {
                       'mechs': {'cad': {'cainf': 0.00024, 'depth': 1.0, 'kt': 0.0, 'taur': 5.0},
                                 'inak2005': {'gkfbar': 0.06, 'gnatbar': 0.19},
                                 'it2': {'gcabar': 0.003, 'qh': 2.5, 'qm': 2.5, 'shift': 2.0, 'taubase': 85.0},
-                                'itrecustom': {'gcabar': 0.0, 'qh': 2.5, 'qm': 2.5, 'shift': 2.0, 'taubase': 85.0},
+#                                'itrecustom': {'gcabar': 0.0, 'qh': 2.5, 'qm': 2.5, 'shift': 2.0, 'taubase': 85.0},
                                 'pas': {'g': 5e-05, 'e': -90.0}},
                       }}}
 
@@ -321,11 +319,8 @@ INcellRule['secs']['soma']['mechs']['inak2005'].update(cellRule)
 INcellRule['secs']['soma']['mechs']['inak2005mut'].update(cellRule)
 
 netParams.cellParams['PYrule'] = PYcellRule
-
 netParams.cellParams['TCrule'] = TCcellRule
-
 netParams.cellParams['RErule'] = REcellRule
-
 netParams.cellParams['INrule'] = INcellRule
 
 ###############################################################################
@@ -502,15 +497,15 @@ netParams.connParams['IN->PY_GABAB'] = {
 ###########################################################
 
 
-netParams.connParams['IN->IN_GABAA'] = {
-    'preConds': {'popLabel': 'IN'}, 
-    'postConds': {'popLabel': 'IN'},
-    'weight': 0,               # ININa*1/(N_IN*IN_IN_GABAA_Prob+1),       
-    'sec': 'soma',
-    'delay': netParams.axondelay, 
-    'loc': 0.5,
-    'synMech': 'GABAA_S',
-    'connList': ININconnlist}
+#netParams.connParams['IN->IN_GABAA'] = {
+#    'preConds': {'popLabel': 'IN'}, 
+#    'postConds': {'popLabel': 'IN'},
+#    'weight': 0,               # ININa*1/(N_IN*IN_IN_GABAA_Prob+1),       
+#    'sec': 'soma',
+#    'delay': netParams.axondelay, 
+#    'loc': 0.5,
+#    'synMech': 'GABAA_S',
+#    'connList': ININconnlist}
 
 ###########################################################
 ##   Glutamate AMPA receptors in synapses from PY to RE  ##
