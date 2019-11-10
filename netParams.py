@@ -180,7 +180,6 @@ REcellRule = {
                                'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
                       'mechs': {'cad': {'cainf': 0.00024,
                                         'depth': 1.0,
-                                        'kd': 0.0,
                                         'kt': 0.0,
                                         'taur': 5.0},
                                 'inak2005': {'gkfbar': 0.06, 'gnatbar': 0.19},
