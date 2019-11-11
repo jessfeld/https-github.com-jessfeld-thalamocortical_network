@@ -7,8 +7,8 @@ cfg = specs.SimConfig()
 #------------------------------------------------------------------------------
 # NA CHANNEL PARAMETERS
 #------------------------------------------------------------------------------
-cfg.nav_type = 3
-cfg.drug = 2
+cfg.nav_type = str_nav_type[3]
+cfg.drug = str_drug[2]
 cfg.dose = 0.05
 cfg.perc = 0.0
 
@@ -18,7 +18,7 @@ cfg.perc = 0.0
 # Simulation parameters
 cfg.allowSelfConns = False # True doesn't actually do anything
 cfg.checkErrors=False # True # 
-cfg.duration = 700 # Duration of the simulation, in ms
+cfg.duration = 700#2500 # Duration of the simulation, in ms
 cfg.dt = 0.1
 cfg.hParams['celsius'] = 36
 cfg.hParams['v_init'] = -70

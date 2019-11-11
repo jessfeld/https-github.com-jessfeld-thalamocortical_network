@@ -126,9 +126,6 @@ INITIAL {
 
     nf = nfinf
     
-    VERBATIM
-    return 0;
-    ENDVERBATIM
 }
 
 
@@ -141,9 +138,6 @@ PROCEDURE states() {        : Computes state variables m, h, s and n
     s = s + sexp*(sinf-s)
     nf = nf + nfexp*(nfinf-nf)
     
-    VERBATIM
-    return 0;
-    ENDVERBATIM
 }
  
 

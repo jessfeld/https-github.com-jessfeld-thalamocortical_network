@@ -130,193 +130,133 @@ netParams.popParams['RE'] = {'cellType': 'RE', 'numCells': nthalamiccells,      
 ###############################################################################
 # Cell parameters list
 ###############################################################################
-taummax = 0.15
-tauhmax = 23.12
-tausmax = 140400
 
 PYcellRule = {
     'conds': {'cellType': 'PY', 'cellModel': '_PY'},
-    'secs': {'soma': {'geom': {'L': 96.0, 'nseg': 1, 'diam': 96.0, 'Ra': 100.0, 'cm': 1.0},
-                      'ions': {'k': {'e': -77.0, 'i': 54.4, 'o': 2.5},
-                               'kf': {'e': -100.0, 'i': 1.0, 'o': 1.0},
-                               'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
-                      'mechs': {'im': {'gkbar': 3e-05, 'taumax': 1000.0},
-                                'inak2005': {'gkfbar': 0.03, 'gnatbar': 0.3 },
-                                'pas': {'g': 0.0001, 'e': -70.0}},
-                      }}}
+    'secs' : {'soma': {'geom': {'L': 96.0, 'nseg': 1, 'diam': 96.0, 'Ra': 100.0, 'cm': 1.0},
+                       'ions': {'k': {'e': -77.0, 'i': 54.4, 'o': 2.5},
+                                'kf': {'e': -100.0, 'i': 1.0, 'o': 1.0},
+                                'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
+                       'mechs': {'im': {'gkbar': 3e-05, 'taumax': 1000.0},
+                                 'inak2005': {'gkfbar': 0.03, 'gnatbar': 0.3 },
+                                 'pas': {'g': 0.0001, 'e': -70.0}},
+             }}}
 
 TCcellRule = {
     'conds': {'cellType': 'TC', 'cellModel': '_TC'},
-    'secs': {'soma': {'geom': {'L': 96.0, 'nseg': 1, 'diam': 96.0, 'Ra': 100.0, 'cm': 1.0},
-                      'ions': {'ca': {'e': 120.0, 'i': 0.00024, 'o': 2.0},
-                               'h': {'e': -40.0, 'i': 1.0, 'o': 1.0},
-                               'kf': {'e': -100.0, 'i': 1.0, 'o': 1.0},
-                               'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
-                      'mechs': {'cad': {'cainf': 0.00024, 'depth': 1.0, 'kt': 0.0, 'taur': 5.0},
-                                'iar': {'Pc': 0.01,
-                                        'cac': 0.002,
-                                        'ghbar': 2e-05,
-                                        'ginc': 2.0,
-                                        'k2': 0.0004,
-                                        'k4': 0.001,
-                                        'nca': 4.0,
-                                        'nexp': 1.0},
-                                'inak2005': {'gkfbar': 0.06, 'gnatbar': 0.15},
-                                'it': {'gcabar': 0.002, 'shift': 2.0},
-                                'pas': {'g': 1e-05, 'e': -70.0}},
-                      'pointps': {'kleak_0': {'mod': 'kleak', 'loc': 0.5, 'gmax': 0.004}},
-                      }}}
+    'secs' : {'soma': {'geom': {'L': 96.0, 'nseg': 1, 'diam': 96.0, 'Ra': 100.0, 'cm': 1.0},
+                       'ions': {'ca': {'e': 120.0, 'i': 0.00024, 'o': 2.0},
+                                'h': {'e': -40.0, 'i': 1.0, 'o': 1.0},
+                                'kf': {'e': -100.0, 'i': 1.0, 'o': 1.0},
+                                'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
+                       'mechs': {'cad': {'cainf': 0.00024, 'depth': 1.0, 'kt': 0.0, 'taur': 5.0},
+                                 'iar': {'Pc': 0.01,
+                                         'cac': 0.002,
+                                         'ghbar': 2e-05,
+                                         'ginc': 2.0,
+                                         'k2': 0.0004,
+                                         'k4': 0.001,
+                                         'nca': 4.0,
+                                         'nexp': 1.0},
+                                 'inak2005': {'gkfbar': 0.06, 'gnatbar': 0.15},
+                                 'it': {'gcabar': 0.002, 'shift': 2.0},
+                                 'pas': {'g': 1e-05, 'e': -70.0}},
+                       'pointps': {'kleak_0': {'mod': 'kleak', 'loc': 0.5, 'gmax': 0.004}},
+             }}}
 
 REcellRule = {
     'conds': {'cellType': 'RE', 'cellModel': '_RE'},
-    'secs': {'soma': {'geom': {'L': 64.86, 'nseg': 1, 'diam': 70.0, 'Ra': 100.0, 'cm': 1.0},
-                      'ions': {'ca': {'e': 120.0, 'i': 0.00024, 'o': 2.0},
-                               'kf': {'e': -100.0, 'i': 1.0, 'o': 1.0},
-                               'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
-                      'mechs': {'cad': {'cainf': 0.00024, 'depth': 1.0, 'kt': 0.0, 'taur': 5.0},
-                                'inak2005': {'gkfbar': 0.06, 'gnatbar': 0.19},
-                                'it2': {'gcabar': 0.003, 'qh': 2.5, 'qm': 2.5, 'shift': 2.0, 'taubase': 85.0},
-#                                'itrecustom': {'gcabar': 0.0, 'qh': 2.5, 'qm': 2.5, 'shift': 2.0, 'taubase': 85.0},
-                                'pas': {'g': 5e-05, 'e': -90.0}},
-                      }}}
+    'secs' : {'soma': {'geom': {'L': 64.86, 'nseg': 1, 'diam': 70.0, 'Ra': 100.0, 'cm': 1.0},
+                       'ions': {'ca': {'e': 120.0, 'i': 0.00024, 'o': 2.0},
+                                'kf': {'e': -100.0, 'i': 1.0, 'o': 1.0},
+                                'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
+                       'mechs': {'cad': {'cainf': 0.00024, 'depth': 1.0, 'kt': 0.0, 'taur': 5.0},
+                                 'inak2005': {'gkfbar': 0.06, 'gnatbar': 0.19},
+                                 'it2': {'gcabar': 0.003, 'qh': 2.5, 'qm': 2.5, 'shift': 2.0, 'taubase': 85.0},
+                                 #'itrecustom': {'gcabar': 0.0, 'qh': 2.5, 'qm': 2.5, 'shift': 2.0, 'taubase': 85.0},
+                                 'pas': {'g': 5e-05, 'e': -90.0}},
+             }}}
 
 INcellRule = {
     'conds': {'cellType': 'IN', 'cellModel': '_IN'},
-    'secs': {'soma': {'geom': {'L': 67.0, 'nseg': 1, 'diam': 67.0, 'Ra': 100.0, 'cm': 1.0},
-                      'ions': {'kf': {'e': -100.0,'i': 1.0, 'o': 1.0},
-                               'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
-                      'mechs': {'inak2005': {'gkfbar': 0.03, 'gnatbar': 0.152},
-                                'inak2005mut': {'gkfbar': 0.03, 'gnatbar': 0.152},
-                                'pas': {'g': 0.00015, 'e': -70.0}},
-                      }}}
+    'secs' : {'soma': {'geom': {'L': 67.0, 'nseg': 1, 'diam': 67.0, 'Ra': 100.0, 'cm': 1.0},
+                       'ions': {'kf': {'e': -100.0,'i': 1.0, 'o': 1.0},
+                                'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
+                       'mechs': {'inak2005': {'gkfbar': 0.03, 'gnatbar': 0.152},
+                                 'inak2005mut': {'gkfbar': 0.03, 'gnatbar': 0.152},
+                                 'pas': {'g': 0.00015, 'e': -70.0}},
+             }}}
 
-### Cell Rule to update all parameters
-cellRule = {}
+### mutRule to update parameters
+mutRule = {
+    'WT'    : {'params':{}, 'taummax':0.15, 'tauhmax':23.12, 'tausmax':140400 },
+    'T875M' : {'params' :{'svhalf': 61.6, 'sk': 3.7, 'staubase':(36200 / 106700) * 140400 },
+               'taummax':0.15,'tauhmax':23.12,'tausmax':(36200 / 106700) * 140400 },
+    'W1204R': {'params' :{'mvhalf': 27.4 - (21.2 - 26.3), 'hvhalf': 41.9 - (39.7 - 45.4) },
+               'taummax':0.15,'tauhmax':23.12,'tausmax':140400 },
+    'R1648H': {'params' :{'mvhalf': 21.2,
+                          'mk': 4.9,
+                          'hvhalf': 39.7,
+                          'hk': 7.7,
+                          'svhalf': 46.1,
+                          'sk': 5.4,
+                          'mtaubase': 0.15,
+                          'htaubase': 11.8,
+                          'htauvhalf': 57.4,
+                          'htauk': 28.8,
+                          'staubase': 106700,
+                          'stauvhalf': 52.7,
+                          'stauk': 18.3},
+               'taummax':0.15,'tauhmax':(11.8 / 20.1) * 23.12,'tausmax':140400 },
+    'R859C': {'params' :{'mvhalf': 21.3,'mk': 57.2571,'staubase': 190200,'stauvhalf': 90.4,'stauk': 38.9 },
+              'taummax':0.15,'tauhmax':23.12,'tausmax':140400 },
+    'knock out': {'params' : {'gnatbar': 0},
+                  'taummax':0.15,'tauhmax':23.12,'tausmax':140400 }
+          }
 
-if (cfg.nav_type == 1):
-    cellRule = {
-        'svhalf'    : 61.6,
-        'sk'        : 3.7,
-        'staubase'  : (36200 / 106700) * 140400 }
-    taummax = 0.15
-    tauhmax = 23.12
-    tausmax = (36200 / 106700) * 140400
+INcellRule['secs']['soma']['mechs']['inak2005mut'].update(mutRule[cfg.nav_type]['params'])
 
-if (cfg.nav_type == 2):
-    cellRule = {
-        'mvhalf'    : 27.4 - (21.2 - 26.3),
-        'hvhalf'    : 41.9 - (39.7 - 45.4) }
-    taummax = 0.15
-    tauhmax = 23.12
-    tausmax = 140400
+taummax = mutRule[cfg.nav_type]['taummax']
+tauhmax = mutRule[cfg.nav_type]['tauhmax']
+tausmax = mutRule[cfg.nav_type]['tausmax']
 
-if (cfg.nav_type == 3):
-    cellRule = {
-        'mvhalf'    : 21.2,
-        'mk'        : 4.9,
-        'hvhalf'    : 39.7,
-        'hk'        : 7.7,
-        'svhalf'    : 46.1, 
-        'sk'        : 5.4,
-        'mtaubase'  : 0.15,
-        'htaubase'  : 11.8,
-        'htauvhalf' : 57.4,
-        'htauk'     : 28.8, 
-        'staubase'  : 106700,
-        'stauvhalf' : 52.7, 
-        'stauk'     : 18.3 }
-    taummax = 0.15
-    tauhmax = (11.8 / 20.1) * 23.12
-    tausmax = 140400
+drugRule = {
+    'no drug': {'gnablock': 1,'hshift': 0,'sshift': 0,'htaubase': tauhmax,'staubase': tausmax },
+    'carbamazepine': {'gnablock': 1 - (1 - 0.763) * cfg.dose, 
+                      'hshift'  : -7 * cfg.dose, 
+                      'sshift'  : -4.63 * cfg.dose, 
+                      'htaubase': tauhmax + tauhmax * (31.526 -1) * cfg.dose, 
+                      'staubase': tausmax - tausmax * (1 - 0.5538) * cfg.dose },
+    'oxcarbazepine': {'gnablock': 1 - (1 - 0.756) * cfg.dose,
+                      'hshift'  : -16.58 * cfg.dose,
+                      'sshift'  : -28.06 * cfg.dose,
+                      'htaubase': tauhmax + tauhmax * (8.079 -1) * cfg.dose,
+                      'staubase': tausmax - tausmax * (1 - 0.3777) * cfg.dose },
+    'lamictal': {'gnablock': 1 - (1 - 0.799) * cfg.dose,
+                 'hshift'  : -4.76 * cfg.dose,
+                 'sshift'  : -53.28 * cfg.dose,
+                 'htaubase': tauhmax + tauhmax * (1.182 - 1) * cfg.dose,
+                 'staubase': tausmax + tausmax * (1.231 - 1) * cfg.dose },
+    'eslicarb': {'gnablock': 1 - (1 - 0.944) * cfg.dose,
+                 'hshift'  : 3.54 * cfg.dose,
+                 'sshift'  : -31.16 * cfg.dose,
+                 'htaubase': tauhmax + tauhmax * (1.778 - 1) * cfg.dose,
+                 'staubase': tausmax - tausmax * (1 - 0.986) * cfg.dose },
+    'VPA': {'gnablock': 1 - (1 - 0.8) * cfg.dose,
+            'hshift'  : 10.0 * cfg.dose,
+            'sshift'  : -31.16 * cfg.dose,
+            'htaubase': tauhmax + tauhmax * (2.0 - 1) * cfg.dose,
+            'staubase': tausmax - tausmax * (1 - 0.986) * cfg.dose },
+    'diazepam': {}
+           }
 
-if (cfg.nav_type == 4):
-    cellRule = {
-        'mvhalf'    : 21.3,
-        'mk'        : 57.2571,
-        'staubase'  : 190200,
-        'stauvhalf' : 90.4,
-        'stauk'     : 38.9 }
-    taummax = 0.15
-    tauhmax = 23.12
-    tausmax = 190200
+if (cfg.drug == 'diazepam'): gabaapercent = 200
 
-if (cfg.nav_type == 5):
-    cellRule = {
-        'gnatbar'   : 0 }
-
-INcellRule['secs']['soma']['mechs']['inak2005mut'].update(cellRule)
-
-if (cfg.drug == 0):
-    # baseline from paper
-    cellRule = {
-        'gnablock': 1,
-        'hshift'  : 0,
-        'sshift'  : 0,
-        'htaubase': tauhmax,
-        'staubase': tausmax }
-
-if (cfg.drug == 1):
-    # carbamazepine
-    print("carbamazepine dose: ", cfg.dose)
-    cellRule = {
-        'gnablock': 1 - (1 - 0.763) * cfg.dose,
-        'hshift'  : -7 * cfg.dose,
-        'sshift'  : -4.63 * cfg.dose,
-        'htaubase': tauhmax + tauhmax * (31.526 -1) * cfg.dose,
-        'staubase': tausmax - tausmax * (1 - 0.5538) * cfg.dose }
-
-
-if (cfg.drug == 2):
-    # oxcarbazepine
-    print("oxcarbazepine dose: ", cfg.dose)
-    cellRule = {
-        'gnablock': 1 - (1 - 0.756) * cfg.dose,
-        'hshift'  : -16.58 * cfg.dose,
-        'sshift'  : -28.06 * cfg.dose,
-        'htaubase': tauhmax + tauhmax * (8.079 -1) * cfg.dose,
-        'staubase': tausmax - tausmax * (1 - 0.3777) * cfg.dose }
-
-if (cfg.drug == 3):
-    # lamictal
-    print("lamictal dose: ", cfg.dose)
-    cellRule = {
-        'gnablock': 1 - (1 - 0.799) * cfg.dose,
-        'hshift'  : -4.76 * cfg.dose,
-        'sshift'  : -53.28 * cfg.dose,
-        'htaubase': tauhmax + tauhmax * (1.182 - 1) * cfg.dose,
-        'staubase': tausmax + tausmax * (1.231 - 1) * cfg.dose }
-
-if (cfg.drug == 4):
-    # eslicarbazepine
-    print("esli dose: ", cfg.dose)
-    cellRule = {
-        'gnablock': 1 - (1 - 0.944) * cfg.dose,
-        'hshift'  : 3.54 * cfg.dose,
-        'sshift'  : -31.16 * cfg.dose,
-        'htaubase': tauhmax + tauhmax * (1.778 - 1) * cfg.dose,
-        'staubase': tausmax - tausmax * (1 - 0.986) * cfg.dose }
-
-if (cfg.drug == 5):
-    # valproic acid
-    print("VPS dose: ", cfg.dose)
-    # gabaapercent=200
-    cellRule = {
-        'gnablock': 1 - (1 - 0.8) * cfg.dose,
-        'hshift'  : 10.0 * cfg.dose,
-        'sshift'  : -31.16 * cfg.dose,
-        'htaubase': tauhmax + tauhmax * (2.0 - 1) * cfg.dose,
-        'staubase': tausmax - tausmax * (1 - 0.986) * cfg.dose }
-
-if (cfg.drug == 6):
-    # diazepam
-    print("diazepam dose: ", cfg.dose)
-    gabaapercent = 200
-
-PYcellRule['secs']['soma']['mechs']['inak2005'].update(cellRule)
-TCcellRule['secs']['soma']['mechs']['inak2005'].update(cellRule)
-REcellRule['secs']['soma']['mechs']['inak2005'].update(cellRule)
-INcellRule['secs']['soma']['mechs']['inak2005'].update(cellRule)
-INcellRule['secs']['soma']['mechs']['inak2005mut'].update(cellRule)
+PYcellRule['secs']['soma']['mechs']['inak2005'].update(drugRule[cfg.drug])
+TCcellRule['secs']['soma']['mechs']['inak2005'].update(drugRule[cfg.drug])
+REcellRule['secs']['soma']['mechs']['inak2005'].update(drugRule[cfg.drug])
+INcellRule['secs']['soma']['mechs']['inak2005'].update(drugRule[cfg.drug])
+INcellRule['secs']['soma']['mechs']['inak2005mut'].update(drugRule[cfg.drug])
 
 netParams.cellParams['PYrule'] = PYcellRule
 netParams.cellParams['TCrule'] = TCcellRule
