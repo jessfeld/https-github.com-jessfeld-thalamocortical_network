@@ -209,7 +209,7 @@ mutRule = {
                           'stauk': 18.3},
                'taummax':0.15,'tauhmax':(11.8 / 20.1) * 23.12,'tausmax':140400 },
     'R859C': {'params' :{'mvhalf': 21.3,'mk': 57.2571,'staubase': 190200,'stauvhalf': 90.4,'stauk': 38.9 },
-              'taummax':0.15,'tauhmax':23.12,'tausmax':140400 },
+              'taummax':0.15,'tauhmax':23.12,'tausmax':190200 },
     'knock out': {'params' : {'gnatbar': 0},
                   'taummax':0.15,'tauhmax':23.12,'tausmax':140400 }
           }
@@ -250,7 +250,7 @@ drugRule = {
     'diazepam': {}
            }
 
-if (cfg.drug == 'diazepam'): gabaapercent = 200
+if (cfg.drug == 'diazepam'): gabaapercent = 2
 
 PYcellRule['secs']['soma']['mechs']['inak2005'].update(drugRule[cfg.drug])
 TCcellRule['secs']['soma']['mechs']['inak2005'].update(drugRule[cfg.drug])
