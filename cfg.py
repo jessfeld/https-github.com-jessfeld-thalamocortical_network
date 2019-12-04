@@ -7,8 +7,8 @@ cfg = specs.SimConfig()
 #------------------------------------------------------------------------------
 # NA CHANNEL PARAMETERS
 #------------------------------------------------------------------------------
-cfg.nav_type = str_nav_type[3]
-cfg.drug = str_drug[6]
+cfg.nav_type = str_nav_type[0]
+cfg.drug = str_drug[0]
 cfg.dose = 0.05
 cfg.perc = 0.0
 
@@ -18,7 +18,7 @@ cfg.perc = 0.0
 # Simulation parameters
 cfg.allowSelfConns = False # True doesn't actually do anything
 cfg.checkErrors=False # True # 
-cfg.duration = 700#2500 # Duration of the simulation, in ms
+cfg.duration = 2500 # Duration of the simulation, in ms
 cfg.dt = 0.1
 cfg.hParams['celsius'] = 36
 cfg.hParams['v_init'] = -70
@@ -39,4 +39,4 @@ cfg.saveFileStep = 1000 # step size in ms to save data to disk
 cfg.savePickle = True # Whether or not to write spikes etc. to a .mat file
 
 # Analysis and plotting
-#cfg.analysis['plotRaster'] = {'saveFig':True} 
+cfg.analysis['plotRaster'] = {'saveFig':True} 
