@@ -3,7 +3,7 @@
 import re
 import os
 
-directory = "rasters_0.05"
+directory = "no_drug_IN"
 
 nav_type = ['WT', 'T875M', 'W1204R', 'R1648H', 'R859C', 'knock_out'] 
 drug     = ['no_drug', 'carbamazepine', 'oxcarbazepine', 'lamictal', 'eslicarb', 'VPA', 'diazepam']

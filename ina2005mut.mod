@@ -1,4 +1,4 @@
-:  ichanWT2005.mod 
+: originally form knoxmodel inak2005.mod -- ina2005 split from ik2005
 :   Alan Goldin Lab, University of California, Irvine; Jay Lickfett - Last Modified: 6 July 2005
 :  This file is the Nav1.1 wild-type channel model described in:
 :		Barela et al. An Epilepsy Mutation in the Sodium Channel SCN1A That Decreases Channel Excitability.  J. Neurosci. 26(10): p. 2714-2723 
@@ -6,22 +6,19 @@
 : Spampanato et al. 2004 A Novel Epilepsy Mutation in the Sodium Channel SCN1A Identifies a Cytoplasmic Domain for Beta Subunit Interaction. J. Neurosci. 24:10022-10034
 
 NEURON { 
-    SUFFIX inak2005a
-    USEION nat READ enat WRITE inat CHARGE 1
-    USEION kf READ ekf WRITE ikf  CHARGE 1
-    RANGE gnat, gkf
-    RANGE gnatbar, gkfbar, gnablock
-    RANGE minf, mtau, hshift, sshift, mvhalf, mk, hvhalf, hk, svhalf, sk, mtaubase, htauk, htauvhalf, htauk, stauvhalf, stauk, hinf, htau, sinf, stau, nfinf, nftau, inat
+    SUFFIX ina2005
+    USEION na READ ena WRITE ina CHARGE 1
+    RANGE gna
+    RANGE gnabar, gnablock
+    RANGE minf, mtau, hshift, sshift, mvhalf, mk, hvhalf, hk, svhalf, sk, mtaubase, htauk, htauvhalf, htauk, stauvhalf, stauk, hinf, htau, sinf, stau, inat
     RANGE m, h, s, htaubase, staubase
+    GLOBAL q10, perc, emut
 }
 
 PARAMETER {
     celsius
-    enat  (mV)
-    gnatbar (mho/cm2)   
-    ekf  (mV)
-    gkfbar (mho/cm2)
-    type = 0       : 0 is WT, 1 is T875M, 2 is W1204R, 3 is R1648H, 4 is R859C
+    gnabar (mho/cm2)   
+    ena
     gnablock = 1.0
     mvhalf = 27.4 (mV)
     mk = 5.4043
@@ -38,26 +35,25 @@ PARAMETER {
     staubase = 140400
     stauvhalf = 71.3 (mV)
     stauk = 30.9
+    perc = 0
+    emut = -40
 }
 
 ASSIGNED {
     v (mV) 
-    gnat (mho/cm2) 
-    gkf (mho/cm2)
-    inat (mA/cm2)
-    ikf (mA/cm2)
-    minf hinf sinf nfinf
-    mtau htau stau nftau
+    q10
+    gna (mho/cm2) 
+    ina (mA/cm2)
+    minf hinf sinf
+    mtau htau stau
 } 
 
-STATE { m h s nf }
+STATE { m h s }
  
 BREAKPOINT {
     SOLVE states METHOD cnexp
-    gnat = gnatbar*gnablock*m*m*m*h*s  
-    inat = gnat*(v - enat)
-    gkf = gkfbar*nf*nf*nf*nf
-    ikf = gkf*(v-ekf)
+    gna = gnabar*gnablock*m*m*m*h*s  
+    ina = gna*( ( 1 - perc) * (v - ena) + (perc) * (v - emut) )
 }
 
 INITIAL {
@@ -65,7 +61,6 @@ INITIAL {
     m = minf
     h = hinf
     s = sinf
-    nf = nfinf
 }
 
 DERIVATIVE states {
@@ -73,35 +68,25 @@ DERIVATIVE states {
     m' = (minf - m) / mtau
     h' = (hinf - h) / htau
     s' = (sinf - s) / stau
-    nf' = (nfinf - nf) / nftau
 }
  
-LOCAL q10
-
 PROCEDURE rates(v (mV)) {   :Computes rate and other constants at current v. Call once from HOC to initialize inf at resting v.
     LOCAL  alpha, beta, sum, vhs, vss
-    TABLE minf, hinf, sinf,  nfinf, mtau, htau, stau, nftau DEPEND celsius FROM -100 TO 100 WITH 200
+    : TABLE minf, hinf, sinf,  nfinf, mtau, htau, stau, nftau DEPEND celsius FROM -100 TO 100 WITH 200
     q10 = 3^((celsius - 6.3)/10)
     vhs = v - hshift
     vss = v - sshift
     :"m" sodium activation system
     minf = 1/(1+exp(-(v+mvhalf)/mk))		
-    mtau = mtaubase
+    mtau = mtaubase/q10
 
     :"h" sodium fast inactivation system
     hinf = 1/(1+exp((vhs+hvhalf)/hk))				
-    htau = htaubase*exp(-0.5*((v+htauvhalf)/htauk)^2) 	
+    htau = htaubase*exp(-0.5*((v+htauvhalf)/htauk)^2)/q10
        
     :"s" sodium slow inactivation system
     sinf = 1/(1+exp((vss+svhalf)/sk))						
-    stau = staubase*exp(-0.5*((v+stauvhalf)/stauk)^2)	
-
-    :"nf" fKDR activation system				
-    alpha = -0.07*vtrap((v+65-47),-6)
-    beta = 0.264/exp((v+65-22)/40)
-    sum = alpha+beta        
-    nftau = 1/sum      
-    nfinf = alpha/sum
+    stau = staubase*exp(-0.5*((v+stauvhalf)/stauk)^2)/q10
 }
  
 FUNCTION vtrap(x,y) {  :Traps for 0 in denominator of rate eqns.

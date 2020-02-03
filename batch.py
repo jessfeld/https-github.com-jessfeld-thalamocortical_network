@@ -13,4 +13,5 @@ b.saveFolder = 'batch_data'
 b.method = 'grid'
 b.runCfg = {'type': 'mpi_bulletin', 'script': 'init.py', 'skip': True}
 
-b.run()
+if __name__ == "__main__":
+    b.run()

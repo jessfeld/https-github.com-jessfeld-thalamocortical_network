@@ -7,19 +7,18 @@
 
 NEURON { 
     SUFFIX ina2005
-    USEION nat READ enat WRITE inat CHARGE 1
-    RANGE gnat
-    RANGE gnatbar, gnablock
+    USEION na READ ena WRITE ina CHARGE 1
+    RANGE gna
+    RANGE gnabar, gnablock
     RANGE minf, mtau, hshift, sshift, mvhalf, mk, hvhalf, hk, svhalf, sk, mtaubase, htauk, htauvhalf, htauk, stauvhalf, stauk, hinf, htau, sinf, stau, inat
     RANGE m, h, s, htaubase, staubase
-    RANGE emut, perc
-    GLOBAL q10
+    GLOBAL q10, perc, emut
 }
 
 PARAMETER {
     celsius
-    gnatbar (mho/cm2)   
-    enat
+    gnabar (mho/cm2)   
+    ena
     gnablock = 1.0
     mvhalf = 27.4 (mV)
     mk = 5.4043
@@ -36,15 +35,15 @@ PARAMETER {
     staubase = 140400
     stauvhalf = 71.3 (mV)
     stauk = 30.9
-    emut = 40 (mV)
-    perc = 0.0
+    perc = 0
+    emut = -40
 }
 
 ASSIGNED {
     v (mV) 
     q10
-    gnat (mho/cm2) 
-    inat (mA/cm2)
+    gna (mho/cm2) 
+    ina (mA/cm2)
     minf hinf sinf
     mtau htau stau
 } 
@@ -53,8 +52,8 @@ STATE { m h s }
  
 BREAKPOINT {
     SOLVE states METHOD cnexp
-    gnat = gnatbar*gnablock*m*m*m*h*s
-    inat = gnat*( ( 1 - perc) * (v - enat) + (perc) * (v - emut) )
+    gna = gnabar*gnablock*m*m*m*h*s  
+    ina = gna*( ( 1 - perc) * (v - ena) + (perc) * (v - emut) )
 }
 
 INITIAL {
