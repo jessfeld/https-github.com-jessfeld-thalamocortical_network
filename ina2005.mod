@@ -12,7 +12,7 @@ NEURON {
     RANGE gnabar, gnablock
     RANGE minf, mtau, hshift, sshift, mvhalf, mk, hvhalf, hk, svhalf, sk, mtaubase, htauk, htauvhalf, htauk, stauvhalf, stauk, hinf, htau, sinf, stau, inat
     RANGE m, h, s, htaubase, staubase
-    GLOBAL q10, perc, emut
+    GLOBAL q10
 }
 
 PARAMETER {
@@ -35,8 +35,6 @@ PARAMETER {
     staubase = 140400
     stauvhalf = 71.3 (mV)
     stauk = 30.9
-    perc = 0
-    emut = -40
 }
 
 ASSIGNED {
@@ -53,7 +51,7 @@ STATE { m h s }
 BREAKPOINT {
     SOLVE states METHOD cnexp
     gna = gnabar*gnablock*m*m*m*h*s  
-    ina = gna*( ( 1 - perc) * (v - ena) + (perc) * (v - emut) )
+    ina = gna*(v - ena )
 }
 
 INITIAL {

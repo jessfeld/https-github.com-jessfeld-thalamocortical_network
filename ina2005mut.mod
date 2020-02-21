@@ -6,7 +6,7 @@
 : Spampanato et al. 2004 A Novel Epilepsy Mutation in the Sodium Channel SCN1A Identifies a Cytoplasmic Domain for Beta Subunit Interaction. J. Neurosci. 24:10022-10034
 
 NEURON { 
-    SUFFIX ina2005
+    SUFFIX ina2005mut
     USEION na READ ena WRITE ina CHARGE 1
     RANGE gna
     RANGE gnabar, gnablock

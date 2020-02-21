@@ -2,53 +2,53 @@
 
 NEURON { 
     SUFFIX ik2005
-    USEION kf READ ekf WRITE ikf CHARGE 1
-    RANGE gkf, gkfbar, nfinf, nftau
+    USEION k READ ek WRITE ik CHARGE 1
+    RANGE gk, gkbar, ninf, ntau
     GLOBAL q10
 }
 
 PARAMETER {
     celsius
-    ekf  (mV)
-    gkfbar (mho/cm2)
+    ek  (mV)
+    gkbar (mho/cm2)
 }
 
 ASSIGNED {
     v (mV) 
     q10
-    gkf (mho/cm2)
-    ikf (mA/cm2)
-    nfinf nftau
+    gk (mho/cm2)
+    ik (mA/cm2)
+    ninf ntau
 } 
 
-STATE { nf }
+STATE { n }
  
 BREAKPOINT {
     SOLVE states METHOD cnexp
-    gkf = gkfbar*nf*nf*nf*nf
-    ikf = gkf*(v-ekf)
+    gk = gkbar*n*n*n*n
+    ik = gk*(v-ek)
 }
 
 INITIAL {
     rates(v)
-    nf = nfinf
+    n = ninf
 }
 
 DERIVATIVE states {
     rates(v)           
-    nf' = (nfinf - nf) / nftau
+    n' = (ninf - n) / ntau
 }
  
 PROCEDURE rates(v (mV)) {   :Computes rate and other constants at current v. Call once from HOC to initialize inf at resting v.
     LOCAL  alpha, beta, sum
-    : TABLE minf, hinf, sinf,  nfinf, mtau, htau, stau, nftau DEPEND celsius FROM -100 TO 100 WITH 200
+    : TABLE min, hin, sin,  ninf, mtau, htau, stau, ntau DEPEND celsius FROM -100 TO 100 WITH 200
     q10 = 3^((celsius - 6.3)/10)
-    :"nf" fKDR activation system				
+    :"n" KDR activation system				
     alpha = -0.07*vtrap((v+65-47),-6)
     beta = 0.264/exp((v+65-22)/40)
     sum = alpha+beta        
-    nftau = 1/sum/q10
-    nfinf = alpha/sum
+    ntau = 1/sum/q10
+    ninf = alpha/sum
 }
  
 FUNCTION vtrap(x,y) {  :Traps for 0 in denominator of rate eqns.
