@@ -130,62 +130,10 @@ netParams.popParams['RE'] = {'cellType': 'RE', 'numCells': nthalamiccells,      
 ###############################################################################
 # Cell parameters list
 ###############################################################################
-
-PYcellRule = {
-    'conds': {'cellType': 'PY', 'cellModel': '_PY'},
-    'secs' : {'soma': {'geom': {'L': 96.0, 'nseg': 1, 'diam': 96.0, 'Ra': 100.0, 'cm': 1.0},
-                       'ions': {'k': {'e': -77.0, 'i': 54.4, 'o': 2.5},
-                                'kf': {'e': -100.0, 'i': 1.0, 'o': 1.0},
-                                'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
-                       'mechs': {'im': {'gkbar': 3e-05, 'taumax': 1000.0},
-                                 'inak2005': {'gkfbar': 0.03, 'gnatbar': 0.3 },
-                                 'pas': {'g': 0.0001, 'e': -70.0}},
-             }}}
-
-TCcellRule = {
-    'conds': {'cellType': 'TC', 'cellModel': '_TC'},
-    'secs' : {'soma': {'geom': {'L': 96.0, 'nseg': 1, 'diam': 96.0, 'Ra': 100.0, 'cm': 1.0},
-                       'ions': {'ca': {'e': 120.0, 'i': 0.00024, 'o': 2.0},
-                                'h': {'e': -40.0, 'i': 1.0, 'o': 1.0},
-                                'kf': {'e': -100.0, 'i': 1.0, 'o': 1.0},
-                                'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
-                       'mechs': {'cad': {'cainf': 0.00024, 'depth': 1.0, 'kt': 0.0, 'taur': 5.0},
-                                 'iar': {'Pc': 0.01,
-                                         'cac': 0.002,
-                                         'ghbar': 2e-05,
-                                         'ginc': 2.0,
-                                         'k2': 0.0004,
-                                         'k4': 0.001,
-                                         'nca': 4.0,
-                                         'nexp': 1.0},
-                                 'inak2005': {'gkfbar': 0.06, 'gnatbar': 0.15},
-                                 'it': {'gcabar': 0.002, 'shift': 2.0},
-                                 'pas': {'g': 1e-05, 'e': -70.0}},
-                       'pointps': {'kleak_0': {'mod': 'kleak', 'loc': 0.5, 'gmax': 0.004}},
-             }}}
-
-REcellRule = {
-    'conds': {'cellType': 'RE', 'cellModel': '_RE'},
-    'secs' : {'soma': {'geom': {'L': 64.86, 'nseg': 1, 'diam': 70.0, 'Ra': 100.0, 'cm': 1.0},
-                       'ions': {'ca': {'e': 120.0, 'i': 0.00024, 'o': 2.0},
-                                'kf': {'e': -100.0, 'i': 1.0, 'o': 1.0},
-                                'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
-                       'mechs': {'cad': {'cainf': 0.00024, 'depth': 1.0, 'kt': 0.0, 'taur': 5.0},
-                                 'inak2005': {'gkfbar': 0.06, 'gnatbar': 0.19},
-                                 'it2': {'gcabar': 0.003, 'qh': 2.5, 'qm': 2.5, 'shift': 2.0, 'taubase': 85.0},
-                                 #'itrecustom': {'gcabar': 0.0, 'qh': 2.5, 'qm': 2.5, 'shift': 2.0, 'taubase': 85.0},
-                                 'pas': {'g': 5e-05, 'e': -90.0}},
-             }}}
-
-INcellRule = {
-    'conds': {'cellType': 'IN', 'cellModel': '_IN'},
-    'secs' : {'soma': {'geom': {'L': 67.0, 'nseg': 1, 'diam': 67.0, 'Ra': 100.0, 'cm': 1.0},
-                       'ions': {'kf': {'e': -100.0,'i': 1.0, 'o': 1.0},
-                                'nat': {'e': 50.0, 'i': 1.0, 'o': 1.0}},
-                       'mechs': {'inak2005': {'gkfbar': 0.03, 'gnatbar': 0.152},
-                                 'inak2005mut': {'gkfbar': 0.03, 'gnatbar': 0.152},
-                                 'pas': {'g': 0.00015, 'e': -70.0}},
-             }}}
+PYcellRule = netParams.importCellParams(label = 'PY', conds={'cellType':'PY', 'cellModel': '_PY'}, fileName='cells.py' , cellName='PY')
+TCcellRule = netParams.importCellParams(label = 'TC', conds={'cellType':'TC', 'cellModel': '_TC'}, fileName='cells.py' , cellName='TC')
+INcellRule = netParams.importCellParams(label = 'IN', conds={'cellType':'IN', 'cellModel': '_IN'}, fileName='cells.py' , cellName='IN')
+REcellRule = netParams.importCellParams(label = 'RE', conds={'cellType':'RE', 'cellModel': '_RE'}, fileName='cells.py' , cellName='RE')
 
 ### mutRule to update parameters
 mutRule = {
@@ -357,7 +305,6 @@ netParams.connParams['RE->TC_GABAA'] = {
 ###########################################################
 ##   GABAb receptors in in synapses from RE to TC cells  ##
 ###########################################################
-
 
 netParams.connParams['RE->TC_GABAB'] = {
     'oneSynPerNetcon': True,

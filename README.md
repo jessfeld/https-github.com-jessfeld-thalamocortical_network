@@ -5,13 +5,18 @@ inak2005 is the orig
 inak2005a is the one switched to NEURON inegration with cnexp
 inak2005b is similar to orig but was editing to see if any minor changes made any difference
 
+cd mods
 `nrnivmodl` # to compile
+cd ..
+mv -rf mods/x86_64 x86_64
 nrniv -python test.py
 
 Port of Dravet thalamocortical seizure model.
 For proper results, run with the multiple synapse netpyne version at: 
 https://github.com/jchen6727/netpyne.git 
 (a pull request is pending on the official netpyne development version)
+
+cells are handled with genrn generic neuron cell template.
 
 run with
 python init.py
@@ -41,7 +46,3 @@ version (as opposed to the multiple synapse netpyne version) is located in the
 images folder as RESULTS_DEV.png
 
 images/RESULTS_DEV.png
-
-
-
-
