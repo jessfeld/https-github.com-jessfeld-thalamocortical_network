@@ -1,5 +1,7 @@
 from genrn import genrn
 
+#Nernst potential of cl-
+ecl = -65
 class PY(genrn):
     def __init__(self):
         self.cellRule = {
@@ -7,9 +9,11 @@ class PY(genrn):
             'ions' : {'k': -77.0, 'kf': -100.0, 'nat': 50.0},
             'mechs': {'im': {'gkbar': 3e-05, 'taumax': 1000.0},
                       'inak2005': {'gkfbar': 0.03, 'gnatbar': 0.3},
-                      'pas': {'g': 0.0001, 'e': -70.0}},
+                      'pas': {'g': 0.0001, 'e': -70.0},
+                      }
             }
-        super(PY, self).__init__(**self.cellRule)
+        super().__init__(**self.cellRule)
+        super().insert_mech('soma', 'gabaat', { 'cl': ecl })
 
 class TC(genrn):
     def __init__(self):
@@ -25,7 +29,8 @@ class TC(genrn):
                       'pas': {'g': 1e-05, 'e': -70.0},
                       'kleak': {'gkbar': 0.004}},
             }
-        super(TC, self).__init__(**self.cellRule)
+        super().__init__(**self.cellRule)
+        super().insert_mech('soma', 'gabaat', { 'cl': ecl })
 
 class RE(genrn):
     def __init__(self):
@@ -38,7 +43,8 @@ class RE(genrn):
                       # 'itrecustom': {'gcabar': 0.0, 'qh': 2.5, 'qm': 2.5, 'shift': 2.0, 'taubase': 85.0},
                       'pas': {'g': 5e-05, 'e': -90.0}},
             }
-        super(RE, self).__init__(**self.cellRule)
+        super().__init__(**self.cellRule)
+        super().insert_mech('soma', 'gabaat', { 'cl': ecl })
 
 class IN(genrn):
     def __init__(self):
@@ -49,4 +55,16 @@ class IN(genrn):
                       'inak2005mut': {'gkfbar': 0.03, 'gnatbar': 0.152},
                       'pas': {'g': 0.00015, 'e': -70.0}},
             }
-        super(IN, self).__init__(**self.cellRule)
+        super().__init__(**self.cellRule)
+        super().insert_mech('soma', 'gabaat', { 'cl': ecl })
+
+if __name__=='__main__':
+    pyc = PY()
+    tcc = TC()
+    rec = RE()
+    inc = IN()
+    print("PY cell:\n%s" %(pyc))
+    print("TC cell:\n%s" %(tcc))
+    print("RE cell:\n%s" %(rec))
+    print("IN cell:\n%s" %(inc))
+    pass

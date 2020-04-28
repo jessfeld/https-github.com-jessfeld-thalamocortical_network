@@ -8,7 +8,7 @@ ENDCOMMENT
 
 NEURON {
     SUFFIX gabaat
-    USEION cl READ ecl WRITE icl
+    USEION cl READ ecl WRITE icl VALENCE -1
     RANGE gclbar, icl
 }
 

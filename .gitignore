@@ -1,2 +1,10 @@
 
 __pycache__/
+
+.idea/
+
+x86_64/.libs/
+
+x86_64/
+
+data/sim.pkl
