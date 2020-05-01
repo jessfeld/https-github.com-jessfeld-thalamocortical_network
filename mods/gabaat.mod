@@ -7,7 +7,7 @@ GABAA tonic receptor
 ENDCOMMENT
 
 NEURON {
-    SUFFIX gabaat
+    SUFFIX gabaatp
     USEION cl READ ecl WRITE icl VALENCE -1
     RANGE gclbar, icl
 }

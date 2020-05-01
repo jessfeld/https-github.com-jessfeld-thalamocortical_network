@@ -1,0 +1,109 @@
+* 4.26 background, start messing with files
+** TODO goal of this is to implement a GABAA tonic receptor.
+** discussed this in Slack on April 14th.
+1:43 PM
+jchen.6727 quick question, modelling will just alter the resting membrane potential of the cell based on electrophys data or are planning on developing a mutated GABAA receptor? (edited) 
+1:47 PM
+on that note, probably want to comment back in the GABAa IN->IN connections if going that route
+1:52 PM
+Kazutaka i think implement of GABAa mutation is insufficient because the simulation result after decreasing cortical GABAa has different result with mat paper
+alteration of RMP is one of option to explore
+1:52 PM
+what did you get rid of GABAa IN>IN?
+1:53 PM
+jchen.6727 it's ~line 435
+1:53 PM
+Kazutaka sorry, “why” i mean
+1:56 PM
+jchen.6727 For the purposes of reproducing the original model those netcons were not used. Not exploring GABAa at the time (edited) 
+1:56 PM
+and varying GABAa IN->IN did not have an effect on outcome for the original parameter set. But now we are looking at GABAa mutations
+1:57 PM
+on that note->
+decreasing cortical GABAa <-- I don't mean decreasing cortical GABAa but implementing a different GABAa that replicates the mutation
+that is, the gabaa.mod file
+I think it makes sense that cortical GABAa weight or mutation on its own might be insufficient as the design has explicit postsynaptic activity based on presynaptic action potentials (that is, no baseline activity of the GABAa receptor). (edited) 
+2:12 PM
+jchen.6727 as for changing the baseline membrane potential.
+passive equilibrium potential / chloride channel?
+current clamp?
+GABAa model edit and background stimulus?
+ig depends on availability of electrophys data (edited) 
+2:39 PM
+billl change g_pas
+2:51 PM
+Kazutaka i see, thx
+the block of cortical GABA by RR-L655 leads SWD in Fig 2 of Matt paper, which cannot be replicated in the model
+so, i thought synaptic weight or other parameters like g_pas should be optimized before implementing GABA mutation
+houw do you think of that??
+3:00 PM
+billl i still have to read the paper;sorry; what do you think jessica
+3:06 PM
+jchen.6727 wait, to clarify its tonic (and prob phasic) inhibition, whereas our GABAa is purely phasic (edited) 
+3:07 PM
+I might not be clear on terminology
+3:09 PM
+Kazutaka oh, yes
+tonic (persistent) GABAA current was inhibited in the paper
+why is our GABAA phasic current??
+3:13 PM
+jchen.6727 "Phasic inhibition is mediated by synaptically-localized receptors with a low affinity for GABA and results in a transient, rapidly desensitizing GABAergic conductance; whereas, tonic inhibition is mediated by extrasynaptic receptors with a high affinity for GABA and results in a persistent GABAergic conductance."
+from: https://paperpile.com/app/p/7826fea3-1dc3-0756-a706-116a38eb59c2
+in the Knox model, the GABAA does the former, not the latter
+3:14 PM
+the phasic current would be approximated in one of the ion channels most likely (edited) 
+3:16 PM
+Kazutaka i see, interesting - -
+so do we have any tonic GABA current at the moment?
+3:21 PM
+jchen.6727 Well, I'm not clear on the terminology so maybe we can get some clarification.
+But the action of GABAergic receptors are not fully incorporated by the GABAA implemented in our model, so just altering the netcon weight for GABAa will not be able to recapture the same effects as the in-vivo model. The effects of tonic GABAA as a persistent conductance winds up in one of the ion channels, not in a synaptically mediated event.
+3:21 PM
+billl g_pas
+3:21 PM
+is tonic
+3:21 PM
+yes just like james said
+3:26 PM
+jchen.6727 can I listen in to the next epilepsy meeting btw?
+3:30 PM
+The caveat may be that g_pas is a representation of all the different ions moving through the membrane though,
+in other words
+g_pas = 0
+would block all the ions, not just the ions through the tonic GABAa channel. (edited) 
+3:35 PM
+billl yeah of course -- we are all togehter the epilepsy/pain/mRNA team!
+3:35 PM
+g_pas is a hodgepodge of channels -- some K, some HCN, some GABAA
+3:36 PM
+some slightly responsive to voltage or perhaps to ligands others (perhaps) not at all
+3:46 PM
+jchen.6727 btw the paper I linked above has in table 1 the magnitude of the tonic current through GABAA receptors and may be helpful if our cell surface areas are appropriate. Or whatever paper you may find that has accurate data on tonic currents may be good place to look
+https://www.frontiersin.org/files/Articles/64757/fncir-08-00003-HTML/image_m/fncir-08-00003-t001.jpg (edited) 
+** Relevant link: https://paperpile.com/app/p/7826fea3-1dc3-0756-a706-116a38eb59c2
+** TODO GABAA tonic as SUFFIX gabaat, will go with a passive current for now. 
+** created a new directory, cleaned it.
+** strange kleak when looking through the mod files (POINT_PROCESS as a passive leak channel? Not being acted on synaptically. Not using K ion). revised mod file
+*** NEURON block:
+NEURON {
+	POINT_PROCESS kleak
+	RANGE gmax
+	GLOBAL Erev
+	NONSPECIFIC_CURRENT i
+}
+*** revised to SUFFIX mechanism. use K as ion to share Nernst potential with other K channels (avoid future confusion)
+NEURON {
+	SUFFIX kleak
+	USEION k READ ek WRITE ik
+	RANGE gkbar, ik
+}
+*** K set to -100 mV as per old channel TODO K channel uses ion 'kf' instead of 'k', reversal potential issues in PY cell.
+** revisions to genrn, moved all section properties to a single function, specified section editing vs. tag editing
+* 4.28 background, Cl- synapse implemented
+** reviewed tonic GABAA tonic paper: https://paperpile.com/app/p/7826fea3-1dc3-0756-a706-116a38eb59c2
+** created SUFFIX gabaat mechanism. USEION cl . Reversal potential we're looking at is ~-64 mV
+Nernst ->
+T = 310, z = -1, [Cl]in = 10, [Cl]out = 110, gives ~-64 mV reversal (body temp)
+T = 295 ...                                  gives ~-61 mV reversal
+** alternative is an Exp2Syn similar mechanism with Cl as ion, and generate random synaptic NONSPECIFIC_CURRENT
+
