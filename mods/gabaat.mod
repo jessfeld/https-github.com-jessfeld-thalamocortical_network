@@ -7,7 +7,11 @@ GABAA tonic receptor
 ENDCOMMENT
 
 NEURON {
+<<<<<<< HEAD
     SUFFIX gabaatp
+=======
+    SUFFIX gabaat
+>>>>>>> 6f98693... cl- tonic synapse implemented as a mechanism
     USEION cl READ ecl WRITE icl VALENCE -1
     RANGE gclbar, icl
 }
