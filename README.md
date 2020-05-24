@@ -40,10 +40,6 @@ NOTE IF YOU ARE USING OFFICIAL NETPYNE VERSION:
 working with the current dev branch of netpyne will yield different results,
 as GABA b receptors will be implemented as a single point process instead of
 multiple point processes. 
-< When is the new version of NetPyne being pushed? 
-a) Don't we have access to it 
-b) Will the new branch, or any existing branch of netpyne, handle multiple point processes?
-c) Can we define "single point process" and "multiple point process" here?>
 
 A raster plot resulting from running with the official netpyne development 
 version (as opposed to the multiple synapse netpyne version) is located in the
